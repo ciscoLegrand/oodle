@@ -1,4 +1,6 @@
 module Oodle
-  class ApplicationController < ActionController::Base
+  class ApplicationController < ::ApplicationController
+    layout "application"
+    helper Rails.application.helpers
   end
 end
