@@ -14,20 +14,25 @@ module Oodle
     # GET /questions/new
     def new
       @question = Question.new
+      @questionnaire = Questionnaire.find(params[:questionnaire_id])
     end
-
     # GET /questions/1/edit
     def edit
     end
 
     # POST /questions
     def create
-      @question = Question.new(question_params)
+      @questionnaire = Questionnaire.find(params[:questionnaire_id])
+      @question = @questionnaire.questions.new(question_params)
 
-      if @question.save
-        redirect_to @question, notice: "Question was successfully created."
-      else
-        render :new, status: :unprocessable_entity
+      respond_to do |format|
+        if @question.save
+          format.html { redirect_to @questionnaire, notice: "Question was successfully created." }
+          format.json { render :show, status: :created, location: @questionnaire }
+        else
+          format.html { render :new, status: :unprocessable_entity }
+          format.json { render json: @question.errors, status: :unprocessable_entity }
+        end
       end
     end
 

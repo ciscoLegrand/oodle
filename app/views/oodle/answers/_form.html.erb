@@ -1,8 +1,7 @@
-<%= form_with(model: answer) do |form| %>
+<%= form_with(model: [Current.user, answer], local: true, class: "contents") do |form| %>
   <% if answer.errors.any? %>
-    <div style="color: red">
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
       <h2><%= pluralize(answer.errors.count, "error") %> prohibited this answer from being saved:</h2>
-
       <ul>
         <% answer.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -11,37 +10,32 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :user_id, style: "display: block" %>
-    <%= form.text_field :user_id %>
-  </div>
+  <h1 class="text-xl font-bold">
+    <%= question.description %>
+  </h1>
 
-  <div>
-    <%= form.label :answered_at, style: "display: block" %>
-    <%= form.date_field :answered_at %>
+  <div class="my-5">
+    <% if question.free_text? %>
+      <%= form.text_area :result, rows: 10, class: "w-full" %>
+    <% else %>
+      <%= form.label :result, 'Select the correct answers:' %>
+      <% question.items.each do |item| %>
+        <div>
+          <% if question.multiple? %>
+            <%= form.check_box :result, { multiple: true }, item.display_value, nil %>
+            <%= item.display_value %>
+          <% else %>
+            <%= form.radio_button :result, item.display_value %>
+            <%= item.display_value %>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
   </div>
-
-  <div>
-    <%= form.label :result, style: "display: block" %>
-    <%= form.text_field :result %>
-  </div>
-
-  <div>
-    <%= form.label :score, style: "display: block" %>
-    <%= form.text_field :score %>
-  </div>
-
-  <div>
-    <%= form.label :questionnaire_id, style: "display: block" %>
-    <%= form.text_field :questionnaire_id %>
-  </div>
-
-  <div>
-    <%= form.label :question_id, style: "display: block" %>
-    <%= form.text_field :question_id %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+  <%= form.hidden_field :question_id, value: question.id %>
+  <%= form.hidden_field :questionnaire_id, value: questionnaire.id %>
+  <div class="inline">
+    <%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
+    <%= form.submit 'Next', commit: :next, class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
   </div>
 <% end %>

@@ -13,22 +13,48 @@ module Oodle
 
     # GET /answers/new
     def new
-      @answer = Answer.new
+      @question = Question.find(params[:question_id])
+      @questionnaire = Questionnaire.find(params[:questionnaire_id])
+      existing_answer = Answer.find_by(user_id: Current.user.id, question_id: @question.id, user_questionnaire_id: @user_questionnaire.id)
+
+      if existing_answer
+        flash[:notice] = "You have already responded to this question."
+        redirect_to questionnaire_path(@questionnaire.id)
+      else
+        @answer = Answer.new(user_id: Current.user.id, user_questionnaire_id: @user_questionnaire.id, question_id: @question.id)
+      end
+    end
+
+    # POST /answers or /answers.json
+    def create
+      @answer = Current.user.answers.new(answer_params)
+      @answer.answered_at = Time.zone.now
+      question = Question.find(@answer.question_id)
+
+      if params[:commit].eql? :next
+        @answer.result = { answer: "not responded" }
+      elsif question.free_text?
+        @answer.result = { answer: params[:answer][:result] }
+      else
+        @answer.result = {
+          selected: params[:answer][:result] || [],
+          all: question.items.map(&:display_value)
+        }
+      end
+
+      respond_to do |format|
+        if @answer.save
+          format.html { redirect_to @answer, notice: "Answer was successfully created." }
+          format.json { render :show, status: :created, location: @answer }
+        else
+          format.html { render :new }
+          format.json { render json: @answer.errors, status: :unprocessable_entity }
+        end
+      end
     end
 
     # GET /answers/1/edit
     def edit
-    end
-
-    # POST /answers
-    def create
-      @answer = Answer.new(answer_params)
-
-      if @answer.save
-        redirect_to @answer, notice: "Answer was successfully created."
-      else
-        render :new, status: :unprocessable_entity
-      end
     end
 
     # PATCH/PUT /answers/1
