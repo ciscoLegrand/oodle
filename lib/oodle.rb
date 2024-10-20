@@ -1,6 +1,8 @@
 require "oodle/version"
 require "oodle/engine"
 
+require "view_component"
 module Oodle
-  # Your code goes here...
+ class Engine < ::Rails::Engine
+ end
 end

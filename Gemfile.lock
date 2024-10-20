@@ -2,7 +2,8 @@ PATH
   remote: .
   specs:
     oodle (0.1.0)
-      rails (>= 8.0.0.beta1)
+      rails (>= 6.0.0, < 8.0.0)
+      view_component
 
 GEM
   remote: https://rubygems.org/
@@ -109,6 +110,7 @@ GEM
       net-pop
       net-smtp
     marcel (1.0.4)
+    method_source (1.1.0)
     mini_mime (1.1.5)
     minitest (5.25.1)
     net-imap (0.4.17)
@@ -220,6 +222,10 @@ GEM
     unicode-display_width (2.6.0)
     uri (0.13.1)
     useragent (0.16.10)
+    view_component (3.18.0)
+      activesupport (>= 5.2.0, < 8.0)
+      concurrent-ruby (~> 1.0)
+      method_source (~> 1.0)
     webrick (1.8.2)
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
