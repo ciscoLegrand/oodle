@@ -4,6 +4,7 @@ module Oodle
 
     has_many :questionnaire_questions, dependent: :destroy
     has_many :questions, through: :questionnaire_questions
+    has_many :answers
 
     validates :name, :start_date, :end_date, :manager, presence: true
     validates :duration,
@@ -12,6 +13,8 @@ module Oodle
               }, if: -> { duration.present? }
 
     validate :end_date_after_start_date
+
+    scope :sorted, -> { order(start_date: :asc) }
 
     def available? = (start_date..end_date).cover?(Time.zone.now)
 
