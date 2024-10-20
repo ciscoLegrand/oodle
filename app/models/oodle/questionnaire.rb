@@ -2,6 +2,9 @@ module Oodle
   class Questionnaire < ApplicationRecord
     belongs_to :manager, class_name: "::User"
 
+    has_many :questionnaire_questions, dependent: :destroy
+    has_many :questions, through: :questionnaire_questions
+
     validates :name, :start_date, :end_date, :manager, presence: true
     validates :duration,
               numericality: {
