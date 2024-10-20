@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  description: MyText
+  group: MyString
+  score: 1.5
+  display_value: MyString
+  correct_value: MyString
+
+two:
+  name: MyString
+  description: MyText
+  group: MyString
+  score: 1.5
+  display_value: MyString
+  correct_value: MyString
