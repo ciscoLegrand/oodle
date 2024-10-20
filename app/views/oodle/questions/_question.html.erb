@@ -1,8 +1,6 @@
-<div id="<%= dom_id question %>">
-  <p>
-    <strong>Name:</strong>
-    <%= question.name %>
-  </p>
+<%= render Oodle::CardComponent.new(
+      title: question.name, id: dom_id(question)
+    ) do%>
 
   <p>
     <strong>Description:</strong>
@@ -24,4 +22,6 @@
     <%= question.score %>
   </p>
 
-</div>
+  <%= linkt_to "Show", question, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium" %>
+<% end %>
+    

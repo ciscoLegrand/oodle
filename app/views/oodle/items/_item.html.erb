@@ -1,8 +1,6 @@
-<div id="<%= dom_id item %>">
-  <p>
-    <strong>Name:</strong>
-    <%= item.name %>
-  </p>
+<%= render Oodle::CardComponent.new(
+      title: item.name, id: dom_id(item)
+    ) do%>
 
   <p>
     <strong>Description:</strong>
@@ -29,4 +27,6 @@
     <%= item.correct_value %>
   </p>
 
-</div>
+  <%= link_to "Show", item, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium" %>
+<% end %>
+    
