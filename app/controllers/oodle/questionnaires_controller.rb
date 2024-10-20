@@ -9,6 +9,9 @@ module Oodle
 
     # GET /questionnaires/1
     def show
+      @user_questionnaire = UserQuestionnaire.new(user: Current.user, questionnaire: @questionnaire)
+      binding.break
+      @user_questionnaire.subscribe
     end
 
     # GET /questionnaires/new

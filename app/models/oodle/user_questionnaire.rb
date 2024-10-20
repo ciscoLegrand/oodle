@@ -15,8 +15,8 @@ module Oodle
     def manager_owner? = questionnaire.manager = user
 
     def subscribe
-      return errors.addd(:user, "managers can´t subscribe to questionnaires") if manager_owner?
-      return errors.addd(:user, "already subscribed to this questionnaire") if subscribed?
+      return errors.add(:user, "managers can´t subscribe to questionnaires") if manager_owner?
+      return errors.add(:user, "already subscribed to this questionnaire") if subscribed?
 
       save user_id: user.id, questionnaire_id: questionnaire.id, start_time: Time.zone.now
     end

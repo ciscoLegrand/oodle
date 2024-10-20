@@ -7,27 +7,45 @@
       ]
     ) do%>
 
-  <p>
-    <strong>Start date:</strong>
-    <%= questionnaire.start_date %>
-  </p>
+    <div id="<%= dom_id questionnaire %>" class="<%= questionnaire.available? ? 'bg-slate-100' : 'bg-slate-400' %> rounded-lg p-12 relative px-8">
+      <% if @user_questionnaire.present? %>
+        <span class="absolute -top-2 -right-2 text-sm text-green-500 rounded-full px-2 py-1 bg-green-100">
+          <%= number_to_percentage(@user_questionnaire.progress, precision: 2) %>
+        </span>
+      <p class="my-5">
+        <strong class="block font-medium mb-1">Score:</strong>
+        <%= @score %>
+      </p>
+      <% end %>
+      
+      <p class="my-5">
+        <strong class="block font-medium mb-1">Manager:</strong>
+        <%= questionnaire.manager_id %>
+      </p>
 
-  <p>
-    <strong>End date:</strong>
-    <%= questionnaire.end_date %>
-  </p>
+      <p class="my-5">
+        <strong class="block font-medium mb-1">Name:</strong>
+        <%= questionnaire.name %>
+      </p>  
 
-  <p>
-    <strong>Duration:</strong>
-    <%= questionnaire.duration %>
-  </p>
+      <p class="my-5">
+        <strong class="block font-medium mb-1">Available in:</strong>
+        
+        <% if questionnaire.available? %>
+          <span>Open</span>  
+        <% elsif questionnaire.start_date > Time.zone.now %>
+          <%= time_ago_in_words(questionnaire.start_date) %>
+        <% else %>
+          <span>Closed</span>
+        <% end %>
+      </p>
 
-  <p>
-    <strong>Manager:</strong>
-    <%= questionnaire.manager_id %>
-  </p>
+      <p class="my-5">
+        <strong class="block font-medium mb-1">End date:</strong>
+        <%= questionnaire.end_date %>
+      </p>
+    </div>
 
-  <%= link_to "Show", questionnaire, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium" %>
 <% end %>
     
 <% if action_name == "show" %>  

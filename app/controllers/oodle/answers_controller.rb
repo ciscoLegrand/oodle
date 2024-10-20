@@ -14,7 +14,8 @@ module Oodle
     # GET /answers/new
     def new
       @question = Question.find(params[:question_id])
-      @questionnaire = Questionnaire.find(params[:questionnaire_id])
+      @user_questionnaire = UserQuestionnaire.find_by(user: Current.user, questionnaire: params[:questionnaire_id])
+      binding.break
       existing_answer = Answer.find_by(user_id: Current.user.id, question_id: @question.id, user_questionnaire_id: @user_questionnaire.id)
 
       if existing_answer
