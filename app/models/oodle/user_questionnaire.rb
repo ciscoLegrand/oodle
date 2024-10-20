@@ -20,5 +20,18 @@ module Oodle
 
       save user_id: user.id, questionnaire_id: questionnaire.id, start_time: Time.zone.now
     end
+
+    private
+
+    def update_score
+      answers.each do |answer|
+        next if answer.result["answer"] == "not responded" || !answer.question.scorable
+
+        selected_answers = answer.result["selected"] || []
+        answer.calculate_score(selected_answers, answer.question.items)
+      end
+
+      update! score: answers.sum(&:score)
+    end
   end
 end
