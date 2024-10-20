@@ -7,5 +7,17 @@ module Oodle
     enum question_type: { free_text: 0, simple: 1, multiple: 2 }
 
     validates :name, :question_type, presence: true
+
+    def difficulty
+      return if answers.empty? || score.to_f.zero?
+
+      average_score = ((answers.average(:score).to_f / score) * 100).to_i
+
+      "low" if average_score.between?(75, 100)
+      "medium" if average_score.between?(31, 74)
+      "high" if average_score <= 30
+    rescue => e
+      "can't calculate"
+    end
   end
 end
