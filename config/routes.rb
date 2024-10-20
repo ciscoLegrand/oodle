@@ -3,4 +3,6 @@ Oodle::Engine.routes.draw do
   resources :items
   resources :questions
   resources :questionnaires
+
+  root "questionnaires#index"
 end
