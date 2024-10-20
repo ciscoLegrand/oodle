@@ -4,6 +4,7 @@ module Oodle
 
     has_many :questionnaire_questions, dependent: :destroy
     has_many :questions, through: :questionnaire_questions
+    has_many :user_questionnaires
     has_many :answers
 
     validates :name, :start_date, :end_date, :manager, presence: true
@@ -17,6 +18,15 @@ module Oodle
     scope :sorted, -> { order(start_date: :asc) }
 
     def available? = (start_date..end_date).cover?(Time.zone.now)
+
+    def average_score = user_questionnaires.average(:score).to_f || 0.00
+
+    def completion_percentage
+      retunr 0.00 if user_questionnaires.blank?
+
+      percentage = (user_questionnaires.completed.count.to_f / user_questionnaires.count) * 100
+      percentage.round(2)
+    end
 
     private
 
