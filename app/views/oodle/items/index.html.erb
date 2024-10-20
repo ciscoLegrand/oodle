@@ -2,15 +2,15 @@
 
 <% content_for :title, "Items" %>
 
-<h1>Items</h1>
+<section class="class flex flex-col gap-4">
 
-<div id="items">
-  <% @items.each do |item| %>
-    <%= render item %>
-    <p>
-      <%= link_to "Show this item", item %>
-    </p>
-  <% end %>
-</div>
+  <div class="flex justify-between gap-4 my-8">
+    <h1 class="text-3xl font-semibold text-gray-800">Items</h1>
+    <%= link_to "New item", new_item_path, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium" %>
+  </div>
 
-<%= link_to "New item", new_item_path %>
+  <div id="items" class="grid grid-cols-4 gap-4 ">
+    <%= render @items%>
+  </div>
+</section>
+

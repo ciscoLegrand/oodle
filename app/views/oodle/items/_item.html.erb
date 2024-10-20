@@ -1,5 +1,10 @@
 <%= render Oodle::CardComponent.new(
-      title: item.name, id: dom_id(item)
+      title: item.name, id: dom_id(item),
+      actions: [
+        link_to("Show", item, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium"),
+        link_to("Edit", edit_item_path(item), class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium"),
+        button_to("Destroy", item, method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium")
+      ]
     ) do%>
 
   <p>
@@ -26,7 +31,5 @@
     <strong>Correct value:</strong>
     <%= item.correct_value %>
   </p>
-
-  <%= link_to "Show", item, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium" %>
 <% end %>
     

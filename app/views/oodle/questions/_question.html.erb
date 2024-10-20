@@ -1,5 +1,10 @@
 <%= render Oodle::CardComponent.new(
-      title: question.name, id: dom_id(question)
+      title: question.name, id: dom_id(question),
+            actions: [
+        link_to("Show", question, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium"),
+        link_to("Edit", edit_question_path(question), class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium"),
+        button_to("Destroy", question, method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium")
+      ]
     ) do%>
 
   <p>
