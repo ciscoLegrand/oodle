@@ -8,6 +8,7 @@
 5. [Modelado de datos](#modelado-de-datos)
 6. [Validaciones y Lógica en los Modelos](#validaciones-y-lógica-en-los-modelos)
 7. [Conclusión](#conclusión)
+8. [Entorno Pruebas](#entorno-pruebas)
 
 ---
 
@@ -419,3 +420,15 @@ A continuación, se detallan las validaciones y lógica implementadas en los mod
     - Actualiza el campo `score` con la suma de las puntuaciones de las respuestas.
 
 ---
+
+## Entorno Pruebas
+
+La aplicación está disponible para pruebas en la siguiente URL: [boodle.railsnew.dev](https://boodle.railsnew.dev)
+
+Usuarios de prueba:
+
+- Manager: `email: manager@test.com` | `password: test123`
+- Usuarios:
+  - `email: student1@test.com` | `password: test123`
+  - `email: student2@test.com` | `password: test123`
+  - `email: student3@test.com` | `password: test123`
