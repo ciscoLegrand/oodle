@@ -1,6 +1,6 @@
 # Oodle
 
-## Sollution
+## Solución
 [Solución](doc/solution.md)
 
 ## Uso de la Engine
