@@ -13,16 +13,15 @@ module Oodle
 
     # GET /answers/new
     def new
+      @questionnaire = Questionnaire.find(params[:questionnaire_id])
       @question = Question.find(params[:question_id])
-      @user_questionnaire = UserQuestionnaire.find_by(user: Current.user, questionnaire: params[:questionnaire_id])
-      binding.break
-      existing_answer = Answer.find_by(user_id: Current.user.id, question_id: @question.id, user_questionnaire_id: @user_questionnaire.id)
+      existing_answer = Answer.find_by(user_id: Current.user.id, question_id: @question.id, questionnaire_id: @questionnaire.id)
 
       if existing_answer
         flash[:notice] = "You have already responded to this question."
         redirect_to questionnaire_path(@questionnaire.id)
       else
-        @answer = Answer.new(user_id: Current.user.id, user_questionnaire_id: @user_questionnaire.id, question_id: @question.id)
+        @answer = Answer.new(user_id: Current.user.id, questionnaire_id: @questionnaire.id, question_id: @question.id)
       end
     end
 

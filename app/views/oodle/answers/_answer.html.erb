@@ -2,7 +2,6 @@
       title: answer.question.name, id: dom_id(answer),
             actions: [
         link_to("Show", answer, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium"),
-        link_to("Edit", edit_item_path(answer), class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium"),
       ]
     ) do%>
 
@@ -35,7 +34,5 @@
     <strong>Question:</strong>
     <%= answer.question_id %>
   </p>
-
-  <%= link_to "Show", answer, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium" %>
 <% end %>
     

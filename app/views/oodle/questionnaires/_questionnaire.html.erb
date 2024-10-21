@@ -1,7 +1,7 @@
 <%= render Oodle::CardComponent.new(
       title: questionnaire.name, id: dom_id(questionnaire),
             actions: [
-        link_to("Show", questionnaire, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium"),
+        link_to("Show", questionnaire, data: {turbo_frame: '_top'}, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium"),
         link_to("Edit", edit_questionnaire_path(questionnaire), class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium"),
         button_to("Destroy", questionnaire, method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium")
       ]
@@ -14,7 +14,7 @@
         </span>
       <p class="my-5">
         <strong class="block font-medium mb-1">Score:</strong>
-        <%= @score %>
+        <%= @user_questionnaire.score.to_f %>
       </p>
       <% end %>
       
@@ -53,10 +53,7 @@
   <h1 class="text-xl">Questions: <%= @questionnaire.questions.count %></h1>
 
   <div id="questions" class="min-w-full">
-    <% @questionnaire.questions.each do |question| %>
-      <%= render question %>
-      <%= link_to "Answer this question", new_answer_path({ user_id: Current.user.id, questionnaire_id: @questionnaire.id, question_id: question.id}), class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-    <% end %>
+    <%= render partial: "oodle/questions/question", collection: @questionnaire.questions, as: :question %>
   </div>
 
 <% end %>

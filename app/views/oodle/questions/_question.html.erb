@@ -28,5 +28,10 @@
   </p>
 
   <%= link_to "Show", question, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium" %>
+  
+  <% if action_name == "show" && Current.user.user? %>
+    <%= link_to "Answer this question", new_answer_path({ user_id: Current.user.id, questionnaire_id: @questionnaire.id, question_id: question.id}), data: { turbo_frame: '_top'}, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+  <% end %>
+  
 <% end %>
     
