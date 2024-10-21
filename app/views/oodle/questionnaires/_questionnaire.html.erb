@@ -1,63 +1,71 @@
 <% 
-  show_action = link_to("Show", questionnaire, data: { turbo_frame: "_top" }, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium")
-  manager_actions = [
-    link_to("Edit", edit_questionnaire_path(questionnaire), class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium"),
-    button_to("Destroy", questionnaire, method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium")
-  ]
+show_action = link_to("Show", questionnaire, data: { turbo_frame: "_top" }, class: "btn btn-show btn-show-hover btn-show-focus transition-base")
+manager_actions = [
+  link_to("Edit", edit_questionnaire_path(questionnaire), data: { turbo_frame: "_top" }, class: "btn btn-edit btn-edit-hover btn-edit-focus transition-base", aria: { label: "Edit questionnaire" }),
+  button_to("Destroy", questionnaire, method: :delete, data: { turbo_confirm: "Are you sure?", turbo_frame: "_top" }, class: "btn btn-delete btn-delete-hover btn-delete-focus transition-base", aria: { label: "Delete questionnaire" })
+]
+back_button = link_to("Back", questionnaires_path, class: "w-auto btn btn-back btn-back-hover btn-back-focus transition-base")
 
-
-actions = [] 
-actions = [ show_action ] unless action_name == "show"
+actions = []
+actions = [show_action] unless action_name == "show"
 actions.concat(manager_actions) if Current.user.manager?
-
+actions.concat([back_button]) if action_name == "show"
 %>
 
 <%= render Oodle::CardComponent.new(
-      title: questionnaire.name,
-      id: dom_id(questionnaire),
-      actions: actions
-    ) do%>
+    title: questionnaire.name,
+    id: dom_id(questionnaire),
+    actions: actions
+  ) do %>
 
-    <div id="<%= dom_id questionnaire %>" class="<%= questionnaire.available? ? 'bg-slate-100' : 'bg-slate-400' %> rounded-lg p-12 relative px-8">
-      <% if @user_questionnaire.present? %>
-        <span class="absolute -top-2 -right-2 text-sm text-green-500 rounded-full px-2 py-1 bg-green-100">
-          <%= number_to_percentage(@user_questionnaire.progress, precision: 2) %>
-        </span>
-      <p class="my-5">
-        <strong class="block font-medium mb-1">Score:</strong>
+  <section id="<%= dom_id(questionnaire) %>" class=" rounded-lg relative px-8 py-6 <%= 'bg-red-50' unless questionnaire.available? %>">
+    <% if @user_questionnaire.present? %>
+      <span class="absolute -top-2 -right-2 text-sm text-green-500 rounded-full px-2 py-1 bg-green-100">
+        <%= number_to_percentage(@user_questionnaire.progress, precision: 2) %>
+      </span>
+      <p class="my-5 flex gap-4">
+        <strong class="label">Score:</strong>
         <%= @user_questionnaire.score.to_f %>
       </p>
+    <% end %>
+
+    <p class="my-5 flex gap-4">
+      <strong class="label">Manager:</strong>
+      <%= questionnaire.manager.email_address %>
+    </p>
+
+    <p class="my-5 flex gap-4">
+      <strong class="label">Name:</strong>
+      <%= questionnaire.name %>
+    </p>  
+
+    <p class="my-5 flex gap-4">
+      <strong class="label">Availability:</strong>
+      <% if questionnaire.available? %>
+        <span class="text-green-500 font-semibold">Open</span>
+      <% elsif questionnaire.start_date > Time.zone.now %>
+        <span class="text-amber-500 font-semibold"><%= time_ago_in_words(questionnaire.start_date) %> until open</span>
+      <% else %>
+        <span class="text-red-500 font-semibold">Closed</span>
       <% end %>
-      
-      <p class="my-5">
-        <strong class="block font-medium mb-1">Manager:</strong>
-        <%= questionnaire.manager_id %>
-      </p>
+    </p>
 
-      <p class="my-5">
-        <strong class="block font-medium mb-1">Name:</strong>
-        <%= questionnaire.name %>
-      </p>  
-
-      <p class="my-5">
-        <strong class="block font-medium mb-1">Available in:</strong>
-        
-        <% if questionnaire.available? %>
-          <span>Open</span>  
-        <% elsif questionnaire.start_date > Time.zone.now %>
-          <%= time_ago_in_words(questionnaire.start_date) %>
-        <% else %>
-          <span>Closed</span>
-        <% end %>
-      </p>
-
-      <p class="my-5">
-        <strong class="block font-medium mb-1">End date:</strong>
-        <%= questionnaire.end_date %>
-      </p>
-    </div>
+    <p class="my-5">
+      <strong class="label">End Date:</strong>
+      <%= questionnaire.end_date %>
+    </p>
+  </section>
 
   <% if action_name == "show" %>
-    <%= button_to "Mark as completed", mark_as_completed_answer_path(params[:id]), method: :post, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" if questionnaire.available? && !@user_questionnaire.completed? %>
+    <footer>
+      <% if !Current.user.manager? && questionnaire.available? && !@user_questionnaire.completed? %>
+        <%= button_to "Mark as completed",
+                      mark_as_completed_answer_path(params[:id]),
+                      method: :post,
+                      class: "btn btn-complete btn-complete-hover btn-complete-focus transition-base",
+                      aria: { label: "Mark questionnaire as completed" } %>
+      <% end %>
+    </footer>
   <% end %>
+
 <% end %>

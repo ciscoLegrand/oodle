@@ -1,5 +1,7 @@
 <% content_for :title, "New questionnaire" %>
 
-<h1>New questionnaire</h1>
-
-<%= render "form", questionnaire: @questionnaire %>
+<section class="container mx-auto px-4">
+<%= turbo_frame_tag "new_quesitonnaire" do %>
+  <%= render "form", questionnaire: @questionnaire %>
+<% end  %>
+</section>

@@ -1,12 +1,7 @@
 <% content_for :title, "Editing questionnaire" %>
 
-<h1>Editing questionnaire</h1>
-
-<%= render "form", questionnaire: @questionnaire %>
-
-<br>
-
-<div>
-  <%= link_to "Show this questionnaire", @questionnaire %> |
-  <%= link_to "Back to questionnaires", questionnaires_path %>
-</div>
+<section class="container mx-auto px-4">
+<%= turbo_frame_tag "edit_quesitonnaire" do %>
+  <%= render "form", questionnaire: @questionnaire %>
+<% end  %>
+</section>
