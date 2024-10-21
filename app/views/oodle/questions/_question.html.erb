@@ -1,10 +1,22 @@
+<% 
+  show_action = link_to("Show", question, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium")
+  manager_actions = [
+    link_to("Edit", edit_question_path(question), class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium"),
+    button_to("Destroy", question, method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium")
+  ]
+
+
+actions = [] 
+actions = [ show_action ] unless action_name == "show"
+actions.concat(manager_actions) if Current.user.manager?
+
+%>
+
+
 <%= render Oodle::CardComponent.new(
-      title: question.name, id: dom_id(question),
-            actions: [
-        link_to("Show", question, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium"),
-        link_to("Edit", edit_question_path(question), class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium"),
-        button_to("Destroy", question, method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium")
-      ]
+      title: question.name,
+      id: dom_id(question),
+      actions: actions
     ) do%>
 
   <p>
@@ -26,10 +38,8 @@
     <strong>Score:</strong>
     <%= question.score %>
   </p>
-
-  <%= link_to "Show", question, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium" %>
   
-  <% if action_name == "show" && Current.user.user? %>
+  <% if action_name == "show" && Current.user.user? && Current.user.answers.find_by(question_id: question.id).nil? %>
     <%= link_to "Answer this question", new_answer_path({ user_id: Current.user.id, questionnaire_id: @questionnaire.id, question_id: question.id}), data: { turbo_frame: '_top'}, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
   <% end %>
   

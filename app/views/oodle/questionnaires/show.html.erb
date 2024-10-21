@@ -1,4 +1,13 @@
-<p style="color: green"><%= notice %></p>
+<div class="flex flex-col gap-4 my-4">
+  <p style="color: green"><%= notice %></p>
 
-<%= render @questionnaire %>
+  <%= render @questionnaire %>
 
+  <div class="flex flex-col gap-4">
+    <h1 class="text-xl">Questions: <%= @questionnaire.questions.count %></h1>
+
+    <div id="questions" class="min-w-full grid grid-cols-3 gap-4">
+      <%= render partial: "oodle/questions/question", collection: @questionnaire.questions, as: :question %>
+    </div>
+  </div>
+</div>

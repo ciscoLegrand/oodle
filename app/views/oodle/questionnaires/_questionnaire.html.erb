@@ -1,10 +1,21 @@
+<% 
+  show_action = link_to("Show", questionnaire, data: { turbo_frame: "_top" }, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium")
+  manager_actions = [
+    link_to("Edit", edit_questionnaire_path(questionnaire), class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium"),
+    button_to("Destroy", questionnaire, method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium")
+  ]
+
+
+actions = [] 
+actions = [ show_action ] unless action_name == "show"
+actions.concat(manager_actions) if Current.user.manager?
+
+%>
+
 <%= render Oodle::CardComponent.new(
-      title: questionnaire.name, id: dom_id(questionnaire),
-            actions: [
-        link_to("Show", questionnaire, data: {turbo_frame: '_top'}, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium"),
-        link_to("Edit", edit_questionnaire_path(questionnaire), class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium"),
-        button_to("Destroy", questionnaire, method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium")
-      ]
+      title: questionnaire.name,
+      id: dom_id(questionnaire),
+      actions: actions
     ) do%>
 
     <div id="<%= dom_id questionnaire %>" class="<%= questionnaire.available? ? 'bg-slate-100' : 'bg-slate-400' %> rounded-lg p-12 relative px-8">
@@ -49,14 +60,4 @@
   <% if action_name == "show" %>
     <%= button_to "Mark as completed", mark_as_completed_answer_path(params[:id]), method: :post, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" if questionnaire.available? && !@user_questionnaire.completed? %>
   <% end %>
-<% end %>
-    
-<% if action_name == "show" %>  
-
-  <h1 class="text-xl">Questions: <%= @questionnaire.questions.count %></h1>
-
-  <div id="questions" class="min-w-full">
-    <%= render partial: "oodle/questions/question", collection: @questionnaire.questions, as: :question %>
-  </div>
-
 <% end %>

@@ -44,7 +44,7 @@ module Oodle
 
       respond_to do |format|
         if @answer.save
-          format.html { redirect_to @answer, notice: "Answer was successfully created." }
+          format.html { redirect_to questionnaire_path(@answer.questionnaire.id), notice: "Answer was successfully created." }
           format.json { render :show, status: :created, location: @answer }
         else
           format.html { render :new }

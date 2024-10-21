@@ -2,14 +2,14 @@
 
 <% content_for :title, "questionnaires" %>
 
-<section class="class flex flex-col gap-4">
+<section class="container flex flex-col gap-4">
 
   <div class="flex justify-between gap-4 my-8">
     <h1 class="text-3xl font-semibold text-gray-800">questionnaires</h1>
     <%= link_to "New questionnaire", new_questionnaire_path, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium" if Current.user.manager? %>
   </div>
 
-  <div id="questionnaires" class="grid grid-cols-4 gap-4 ">
+  <div id="questionnaires" class="w-full grid grid-cols-3 gap-4 ">
     <%= render @questionnaires%>
   </div>
 </section>

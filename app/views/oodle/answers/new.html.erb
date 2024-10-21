@@ -1,6 +1,6 @@
 <% content_for :title, "New answer" %>
 
-<h1>New answer</h1>
-<%= render "form", answer: @answer, question: @question, questionnaire: @questionnaire %>
-
-<%= link_to "Back to questionnaire", questionnaire_path(@questionnaire.id), class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+<div class="w-1/3 mx-auto flex flex-col justify-center gap-4">
+  <h1 class="text-3xl font-semibold text-gray-800">Answer</h1>
+  <%= render "form", answer: @answer, question: @question, questionnaire: @questionnaire %>
+</div>

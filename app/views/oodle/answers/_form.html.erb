@@ -1,4 +1,4 @@
-<%= form_with(model: [answer], local: true, class: "contents") do |form| %>
+<%= form_with(model: [answer], local: true, class: "container mx-auto px-4") do |form| %>
   <% if answer.errors.any? %>
     <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
       <h2><%= pluralize(answer.errors.count, "error") %> prohibited this answer from being saved:</h2>
@@ -14,7 +14,7 @@
     <%= question.description %>
   </h1>
 
-  <div class="my-5">
+  <div class="my-5 flex flex-col gap-4">
     <% if question.free_text? %>
       <%= form.text_area :result, rows: 10, class: "w-full" %>
     <% else %>
@@ -37,5 +37,6 @@
   <div class="inline">
     <%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
     <%= form.submit 'Next', commit: :next, class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
+    <%= link_to "Back to questionnaire", questionnaire_path(@questionnaire.id), class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
   </div>
 <% end %>
