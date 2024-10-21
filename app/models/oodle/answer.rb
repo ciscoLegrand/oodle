@@ -25,7 +25,7 @@ module Oodle
     private
 
     def update_questionnaire_progress
-      user.user_questinnaires
+      user.user_questionnaires
           .find_by(user: user, questionnaire: questionnaire)
           .update_progress
     end
