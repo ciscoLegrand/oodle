@@ -4,7 +4,10 @@ module Oodle
 
     # GET /questionnaires
     def index
-      @questionnaires = Questionnaire.all
+      @questionnaires = Questionnaire.all unless params[:sorted].present?
+      @questionnaires = Questionnaire.closed if params[:sorted].eql? "closed"
+      @questionnaires = Questionnaire.opened if params[:sorted].eql? "open"
+      @questionnaires = Questionnaire.pending if params[:sorted].eql? "pending"
     end
 
     # GET /questionnaires/1
@@ -15,7 +18,7 @@ module Oodle
 
     # GET /questionnaires/new
     def new
-      @questionnaire = Questionnaire.new
+      @questionnaire = Questionnaire.new(start_date: Time.zone.now, end_date: Time.zone.now + 1.day)
     end
 
     # GET /questionnaires/1/edit
@@ -24,7 +27,7 @@ module Oodle
 
     # POST /questionnaires
     def create
-      @questionnaire = Questionnaire.new(questionnaire_params)
+      @questionnaire = Questionnaire.new(questionnaire_params.merge(manager: Current.user))
 
       if @questionnaire.save
         redirect_to @questionnaire, notice: "Questionnaire was successfully created."
