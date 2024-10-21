@@ -5,7 +5,7 @@ Gem::Specification.new do |spec|
   spec.version     = Oodle::VERSION
   spec.authors     = [ "cisco gonzalez" ]
   spec.email       = [ "cisco.glez@creadix.es", "cisco.glez@gmail.com" ]
-  spec.homepage    = "railsnew.es"
+  spec.homepage    = "https://railsnew.dev"
   spec.summary     = "Questionnaire system"
   spec.description = "Questionnaire system"
   spec.license     = "MIT"
@@ -14,8 +14,8 @@ Gem::Specification.new do |spec|
   # to allow pushing to a single host or delete this section to allow pushing to any host.
   spec.metadata["allowed_push_host"] = "https://github.com/ciscoLegrand/oodle.git"
 
-  spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = spec.metadata["allowed_push_host"]
+  spec.metadata["homepage_uri"] = "https://railsnew.dev"
+  spec.metadata["source_code_uri"] = "https://github.com/ciscoLegrand/oodle.git"
 
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
     Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
