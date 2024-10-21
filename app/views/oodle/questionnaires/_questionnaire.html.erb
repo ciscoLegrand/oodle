@@ -46,6 +46,9 @@
       </p>
     </div>
 
+  <% if action_name == "show" %>
+    <%= button_to "Mark as completed", mark_as_completed_answer_path(params[:id]), method: :post, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" if questionnaire.available? && !@user_questionnaire.completed? %>
+  <% end %>
 <% end %>
     
 <% if action_name == "show" %>  

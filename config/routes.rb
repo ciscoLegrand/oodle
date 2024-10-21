@@ -1,5 +1,7 @@
 Oodle::Engine.routes.draw do
-  resources :answers
+  resources :answers do
+    post :mark_as_completed, on: :member
+  end
   resources :items
   resources :questions
   resources :questionnaires

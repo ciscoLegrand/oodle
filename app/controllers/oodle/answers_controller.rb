@@ -72,6 +72,15 @@ module Oodle
       redirect_to answers_path, notice: "Answer was successfully destroyed.", status: :see_other
     end
 
+    def mark_as_completed
+      questionnaire = Questionnaire.find(params[:id])
+      Current.user.user_questionnaires
+             .find_by(questionnaire_id: questionnaire.id)
+             .mark_as_completed
+
+      redirect_to questionnaire_path(questionnaire.id), notice: "Questionnaire completed"
+    end
+
     private
       # Use callbacks to share common setup or constraints between actions.
       def set_answer
