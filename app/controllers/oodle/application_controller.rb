@@ -1,8 +1,9 @@
 module Oodle
-  class ApplicationController < ::ApplicationController # Hereda del ApplicationController principal
-    layout "oodle/application" # Sigue usando el layout de la engine
+  class ApplicationController < ::ApplicationController
+    include Pagy::Backend
 
-    # Incluir los helpers de la aplicación principal
+    layout "oodle/application"
+
     helper Rails.application.helpers
   end
 end
