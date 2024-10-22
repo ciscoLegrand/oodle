@@ -6,12 +6,51 @@
   <%= csp_meta_tag %>
 
   <%= yield :head %>
-
-  <%= stylesheet_link_tag    "oodle/application", media: "all" %>
+  <%= stylesheet_link_tag "oodle/application.tailwind", media: "all", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag "oodle", "data-turbo-track": "reload" %>
 </head>
-<body>
+<body class="bg-slate-100">
+    <header class="container mx-auto rounded-lg bg-slate-900 text-slate-300 py-4 px-12 flex justify-between items-center my-12">
+      <div class="flex">
+        Tech
+      </div>
 
-<%= yield %>
+      <nav class="flex items-center gap-4">
+        <% if authenticated? %>
+          <%= link_to "Home", main_app.root_path, class: "font-bold" %>
+
+          <% if request.path.include?("oodle") %>
+            <% if Current.user.manager? %>
+              <%= link_to "Questionnaires", oodle.questionnaires_path, class: "font-bold #{'nav-link-active' if request.url.include?('questionnaires')}" %>
+              <%= link_to "Questions", oodle.questions_path, class: "font-bold #{'nav-link-active' if request.url.include?('questions')}" %>
+              <%= link_to "Items", oodle.items_path, class: "font-bold #{'nav-link-active' if request.url.include?('items')}" %>
+            <% else %>
+              <%= link_to "Questionnaires", oodle.questionnaires_path, class: "font-bold #{'nav-link-active' if request.url.include?('questionnaires')}" %>
+              <%#= link_to "My questionnaires", oodle.user_path(Current.user), class: "font-bold" %>
+            <% end %>
+          <% end %>
+          
+          
+        <% end %>
+      </nav>
+      <div class="flex items-center">
+        <% if authenticated? %>
+          <%= button_to "Sign out", main_app.session_path, method: :delete, class: "font-bold" %> <!-- Ruta de sign-out de la aplicación principal -->
+        <% else %>
+          <%= link_to "Sign in", main_app.new_session_path, class: "font-bold" %> <!-- Ruta de sign-in de la aplicación principal -->
+        <% end %>
+      </div>
+    </header>
+
+    <% if notice.present? %>
+      <div class="absolute top-28 left-8 rounded-lg bg-green-400 text-green-950 border-l-8 border-l-green-900 px-8 py-4 flex justify-between items-center">
+        <%= notice %>
+      </div>
+    <% end %>
+
+    <main class="container mx-auto mt-28 px-5 flex">
+      <%= yield %>
+    </main>
 
 </body>
 </html>
