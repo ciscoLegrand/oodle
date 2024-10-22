@@ -1,25 +1,27 @@
 <%= turbo_frame_tag @id do %>
-  <div class="max-w-lg mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
-    <div class="flex flex-col gap-4 p-5">
-      
-      <% if @actions.present? %>
-        <div class="flex justify-end items-end gap-4">
-          <% @actions.each do |action| %>
-            <%= action%>
-          <% end %>
-        </div>
-      <% end %>
-      
-      <% if @title.present? %>
-        <h2 class="text-xl font-semibold text-gray-800 mb-4">
-          <%= @title %>
-        </h2>
-      <% end %>
-      
-      <div class="text-gray-700">
-        <%= content %>
-      </div>
-    </div>
-  </div>
-<% end %>
+  <article class="card card-hover shadow-hover transform-hover">
+    <div class="card-body">
 
+      <% if @title.present? %>
+        <header class="card-header">
+          <h2 class="card-title">
+            <%= @title %>
+          </h2>
+        </header>
+      <% end %>
+
+      <section class="card-content">
+        <%= content %>
+      </section>
+
+      <% if @actions.present? %>
+        <footer class="card-footer card-actions">
+          <% @actions.each do |action| %>
+            <%= action %>
+          <% end %>
+        </footer>
+      <% end %>
+
+    </div>
+  </article>
+<% end %>
