@@ -7,14 +7,17 @@
     <%= link_to "New questionnaire", new_questionnaire_path, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium" if Current.user.manager? %>
   </div>
 
-  <div class="flex items-center gap-4">
-    <% ["open", "closed", "pending"].each do |status| %>
-      <%= link_to status.capitalize,
-            questionnaires_path(sorted: status),
-            class: "rounded-lg py-3 px-5 bg-blue-100 text-blue-500 hover:bg-blue-200 inline-block font-medium #{'bg-blue-500 text-white' if params[:sorted].eql?(status)}" %>
-    <% end %>
+  <div class="flex justify-between items-center gap-4">
+    <div class="flex items-center gap-4">
+      <% ["open", "closed", "pending"].each do |status| %>
+        <%= link_to status.capitalize,
+              questionnaires_path(sorted: status),
+              class: "rounded-lg py-3 px-5 bg-blue-100 text-blue-500 hover:bg-blue-200 inline-block font-medium #{'bg-blue-500 text-white' if params[:sorted].eql?(status)}" %>
+      <% end %>
+    </div>
+    <%== pagy_nav(@pagy) %>
   </div>
-  <%= params[:sorted]%>
+
   <div id="questionnaires" class="w-full grid grid-cols-3 gap-4 ">
     <%= render @questionnaires%>
   </div>

@@ -1,16 +1,25 @@
-<p style="color: green"><%= notice %></p>
-
-<% content_for :title, "Items" %>
+<% content_for :title, "item" %>
 
 <section class="container flex flex-col gap-4">
 
   <div class="flex justify-between gap-4 my-8">
     <h1 class="text-3xl font-semibold text-gray-800">Items</h1>
-    <%= link_to "New item", new_item_path, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium" %>
+    <%= link_to "New item", new_item_path, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium" if Current.user.manager? %>
   </div>
 
-  <div id="items" class="grid grid-cols-4 gap-4 ">
-    <%= render @items%>
+  <div class="flex justify-between items-center gap-4">
+    <div class="flex items-center gap-4">
+      <% @groups.each do |status| %>
+        <%= link_to status.capitalize,
+                items_path(sorted: status),
+                class: "rounded-lg py-3 px-5 bg-blue-100 text-blue-500 hover:bg-blue-200 inline-block font-medium #{'bg-blue-500 text-white' if params[:sorted].eql?(status)}" %>
+      <% end %>
+      
+    </div>
+    <%== pagy_nav(@pagy) %>
+  </div>
+
+  <div id="item" class="w-full grid grid-cols-3 gap-4 ">
+    <%= render @items %>
   </div>
 </section>
-

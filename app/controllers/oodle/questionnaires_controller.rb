@@ -8,6 +8,8 @@ module Oodle
       @questionnaires = Questionnaire.closed if params[:sorted].eql? "closed"
       @questionnaires = Questionnaire.opened if params[:sorted].eql? "open"
       @questionnaires = Questionnaire.pending if params[:sorted].eql? "pending"
+
+      @pagy, @questionnaires = pagy(@questionnaires)
     end
 
     # GET /questionnaires/1

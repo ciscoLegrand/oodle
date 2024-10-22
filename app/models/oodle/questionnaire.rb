@@ -16,10 +16,9 @@ module Oodle
     validate :end_date_after_start_date
 
     scope :sorted, -> { order(start_date: :asc) }
-    scope :closed, -> { where('end_date < ?', Time.zone.now) }
-    scope :opened, -> { where('start_date <= ? AND end_date >= ?', Time.zone.now, Time.zone.now) }
-    scope :pending, -> { where('start_date > ?', Time.zone.now) }
-    
+    scope :closed, -> { where("end_date < ?", Time.zone.now) }
+    scope :opened, -> { where("start_date <= ? AND end_date >= ?", Time.zone.now, Time.zone.now) }
+    scope :pending, -> { where("start_date > ?", Time.zone.now) }
 
     def available? = (start_date..end_date).cover?(Time.zone.now)
 

@@ -10,6 +10,10 @@ module Oodle
 
     validates :name, :question_type, presence: true
 
+    scope :free_text, -> { where(question_type: 0).order(:name) }
+    scope :simple,    -> { where(question_type: 1).order(:name) }
+    scope :multiple,  -> { where(question_type: 2).order(:name) }
+
     def difficulty
       return if answers.empty? || score.to_f.zero?
 

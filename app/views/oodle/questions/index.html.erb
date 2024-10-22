@@ -1,5 +1,3 @@
-<p style="color: green"><%= notice %></p>
-
 <% content_for :title, "questions" %>
 
 <section class="container flex flex-col gap-4">
@@ -9,8 +7,18 @@
     <%= link_to "New question", new_question_path, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium" if Current.user.manager? %>
   </div>
 
-  <div id="questions" class="grid grid-cols-4 gap-4 ">
+  <div class="flex justify-between items-center gap-4">
+    <div class="flex items-center gap-4">
+      <% ["all", "simple", "multiple", "free_text"].each do |status| %>
+        <%= link_to status.capitalize,
+                questions_path(sorted: status),
+                class: "rounded-lg py-3 px-5 bg-blue-100 text-blue-500 hover:bg-blue-200 inline-block font-medium #{'bg-blue-500 text-white' if params[:sorted].eql?(status)}" %>
+      <% end %>
+    </div>
+    <%== pagy_nav(@pagy) %>
+  </div>
+
+  <div id="questions" class="w-full grid grid-cols-3 gap-4 ">
     <%= render @questions%>
   </div>
 </section>
-

@@ -1,35 +1,46 @@
+<% 
+show_action = link_to("Show", item, data: { turbo_frame: "_top" }, class: "btn btn-show btn-show-hover btn-show-focus transition-base")
+manager_actions = [
+  link_to("Edit", edit_item_path(item), data: { turbo_frame: "_top" }, class: "btn btn-edit btn-edit-hover btn-edit-focus transition-base", aria: { label: "Edit item" }),
+  button_to("Destroy", item, method: :delete, data: { turbo_confirm: "Are you sure?", turbo_frame: "_top" }, class: "btn btn-delete btn-delete-hover btn-delete-focus transition-base", aria: { label: "Delete item" })
+]
+back_button = link_to("Back", items_path, class: "w-auto btn btn-back btn-back-hover btn-back-focus transition-base")
+
+actions = []
+actions = [show_action] unless action_name == "show"
+actions.concat(manager_actions) if Current.user.manager?
+actions.concat([back_button]) if action_name == "show"
+%>
+
 <%= render Oodle::CardComponent.new(
-      title: item.name, id: dom_id(item),
-      actions: [
-        link_to("Show", item, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium"),
-        link_to("Edit", edit_item_path(item), class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium"),
-        button_to("Destroy", item, method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium")
-      ]
-    ) do%>
+    title: item.name,
+    id: dom_id(item),
+    actions: actions
+  ) do %>
 
-  <p>
-    <strong>Description:</strong>
-    <%= item.description %>
-  </p>
+  <section id="<%= dom_id(item) %>" class=" rounded-lg relative px-8 py-6">
+    <p class="my-5 flex flex-col gap-4">
+      <strong class="label">Description:</strong>
+      <%= item.description %>
+    </p>
 
-  <p>
-    <strong>Group:</strong>
-    <%= item.group %>
-  </p>
+    <p class="my-5 flex gap-4">
+      <strong class="label">Score:</strong>
+      <%= item.group %>
+    </p>
 
-  <p>
-    <strong>Score:</strong>
-    <%= item.score %>
-  </p>
+    <p class="my-5 flex gap-4">
+      <strong class="label">Score:</strong>
+      <%= item.score %>
+    </p>
 
-  <p>
-    <strong>Display value:</strong>
-    <%= item.display_value %>
-  </p>
-
-  <p>
-    <strong>Correct value:</strong>
-    <%= item.correct_value %>
-  </p>
+    <p class="my-5 flex gap-4">
+      <strong class="label">Display:</strong>
+      <%= item.display_value %>
+    </p>
+    <p class="my-5 flex gap-4">
+      <strong class="label">Correct:</strong>
+      <%= item.correct_value %>
+    </p>
+  </section>
 <% end %>
-    

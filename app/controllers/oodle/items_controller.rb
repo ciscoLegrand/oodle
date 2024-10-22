@@ -4,7 +4,13 @@ module Oodle
 
     # GET /items
     def index
-      @items = Item.all
+      @groups = [ "all" ].concat Item.all.map(&:group).uniq
+      if params[:sorted].eql?("all") || params[:sorted].blank?
+        @items = Item.all
+      else
+        @items = Item.where(group: params[:sorted])
+      end
+      @pagy, @items = pagy(@items)
     end
 
     # GET /items/1

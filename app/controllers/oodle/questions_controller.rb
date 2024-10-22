@@ -4,7 +4,14 @@ module Oodle
 
     # GET /questions
     def index
-      @questions = Question.all
+      if params[:sorted].eql?("all") || params[:sorted].blank?
+        @questions = Question.all
+      end
+      @questions = Question.simple if params[:sorted].eql? "simple"
+      @questions = Question.multiple if params[:sorted].eql? "multiple"
+      @questions = Question.free_text if params[:sorted].eql? "free_text"
+
+      @pagy, @questions = pagy(@questions)
     end
 
     # GET /questions/1

@@ -1,47 +1,40 @@
 <% 
-  show_action = link_to("Show", question, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium")
-  manager_actions = [
-    link_to("Edit", edit_question_path(question), class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium"),
-    button_to("Destroy", question, method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium")
-  ]
+show_action = link_to("Show", question, data: { turbo_frame: "_top" }, class: "btn btn-show btn-show-hover btn-show-focus transition-base")
+manager_actions = [
+  link_to("Edit", edit_question_path(question), data: { turbo_frame: "_top" }, class: "btn btn-edit btn-edit-hover btn-edit-focus transition-base", aria: { label: "Edit question" }),
+  button_to("Destroy", question, method: :delete, data: { turbo_confirm: "Are you sure?", turbo_frame: "_top" }, class: "btn btn-delete btn-delete-hover btn-delete-focus transition-base", aria: { label: "Delete question" })
+]
+back_button = link_to("Back", questions_path, class: "w-auto btn btn-back btn-back-hover btn-back-focus transition-base")
 
-
-actions = [] 
-actions = [ show_action ] unless action_name == "show"
+actions = []
+actions = [show_action] unless action_name == "show"
 actions.concat(manager_actions) if Current.user.manager?
-
+actions.concat([back_button]) if action_name == "show"
 %>
 
-
 <%= render Oodle::CardComponent.new(
-      title: question.name,
-      id: dom_id(question),
-      actions: actions
-    ) do%>
+    title: question.name,
+    id: dom_id(question),
+    actions: actions
+  ) do %>
 
-  <p>
-    <strong>Description:</strong>
-    <%= question.description %>
-  </p>
+  <section id="<%= dom_id(question) %>" class=" rounded-lg relative px-8 py-6">
+    <p class="my-5 flex flex-col gap-4">
+      <strong class="label">Description:</strong>
+      <%= question.description %>
+    </p>
 
-  <p>
-    <strong>Question type:</strong>
-    <%= question.question_type %>
-  </p>
+    <p class="my-5 flex gap-4">
+      <strong class="label">Type:</strong>
+      <%= question.question_type %>
+    </p>
 
-  <p>
-    <strong>Scorable:</strong>
-    <%= question.scorable %>
-  </p>
-
-  <p>
-    <strong>Score:</strong>
-    <%= question.score %>
-  </p>
-  
-  <% if action_name == "show" && Current.user.user? && Current.user.answers.find_by(question_id: question.id).nil? %>
-    <%= link_to "Answer this question", new_answer_path({ user_id: Current.user.id, questionnaire_id: @questionnaire.id, question_id: question.id}), data: { turbo_frame: '_top'}, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
-  <% end %>
-  
-<% end %>
     
+    <% if question.scorable? %>
+      <p class="my-5 flex gap-4">
+        <strong class="label">Score:</strong>
+        <%= question.score %>
+      </p>
+    <% end %>
+  </section>
+<% end %>
