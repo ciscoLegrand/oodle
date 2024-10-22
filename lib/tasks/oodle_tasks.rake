@@ -7,3 +7,10 @@ task :tailwind_engine_watch do
          -o #{Oodle::Engine.root.join("app/assets/builds/oodle.css")} \
          -c #{Oodle::Engine.root.join("config/tailwind.config.js")}"
 end
+
+task :tailwind_engine_build do
+  system "bin/rails tailwindcss:build \
+         -i #{Oodle::Engine.root.join("app/assets/stylesheets/oodle/application.tailwind.css")} \
+         -o #{Oodle::Engine.root.join("app/assets/builds/oodle.css")} \
+         -c #{Oodle::Engine.root.join("config/tailwind.config.js")} --minify"
+end
