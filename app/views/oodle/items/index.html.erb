@@ -16,7 +16,7 @@
       <% end %>
       
     </div>
-    <%== pagy_nav(@pagy) %>
+    <%= render "layouts/shared/pagy", pagy: @pagy if @pagy.present? %>
   </div>
 
   <div id="item" class="w-full grid grid-cols-3 gap-4 ">

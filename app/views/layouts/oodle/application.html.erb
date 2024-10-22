@@ -5,10 +5,11 @@
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
 
-  <%= yield :head %>
   <%= stylesheet_link_tag "oodle/application.tailwind", media: "all", "data-turbo-track": "reload" %>
   <%= stylesheet_link_tag "oodle", "data-turbo-track": "reload" %>
+  <%= yield :head %>
 </head>
+
 <body class="bg-slate-100">
     <header class="container mx-auto rounded-lg bg-slate-900 text-slate-300 py-4 px-12 flex justify-between items-center my-12">
       <div class="flex">
@@ -29,8 +30,6 @@
               <%#= link_to "My questionnaires", oodle.user_path(Current.user), class: "font-bold" %>
             <% end %>
           <% end %>
-          
-          
         <% end %>
       </nav>
       <div class="flex items-center">

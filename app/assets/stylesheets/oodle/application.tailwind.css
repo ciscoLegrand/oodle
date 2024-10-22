@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @layer components {
   .btn {
     @apply px-3 py-1.5 border rounded-md font-medium text-center;
@@ -200,4 +201,5 @@
   .transform-hover {
     @apply hover:scale-105 duration-500;
   }
+  
 }
