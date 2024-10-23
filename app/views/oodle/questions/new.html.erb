@@ -1,11 +1,8 @@
 <% content_for :title, "New question" %>
 
-<h1>New question</h1>
-
-<%= render "form", question: @question %>
-
-<br>
-
-<div>
-  <%= link_to "Back to questions", questions_path %>
-</div>
+<section class="container mx-auto px-4">
+  <h1 class="text-3xl font-semibold text-gray-800">New Question</h1>
+<%= turbo_frame_tag "new_quesiton" do %>
+  <%= render "form", question: @question %>
+<% end  %>
+</section>

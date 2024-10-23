@@ -1,8 +1,7 @@
-<%= form_with(model: item) do |form| %>
+<%= form_with(model: item, html: { data: { turbo: "false" }, class: "card p-8" }) do |form| %>
   <% if item.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(item.errors.count, "error") %> prohibited this item from being saved:</h2>
-
       <ul>
         <% item.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -11,37 +10,38 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+  <div class="flex flex-col gap-4 my-5">
+    <%= form.label :name, class: "label" %>
+    <%= form.text_field :name, class: "input input-focus" %>
   </div>
 
-  <div>
-    <%= form.label :description, style: "display: block" %>
-    <%= form.textarea :description %>
+  <div class="flex flex-col gap-4 my-5">
+    <%= form.label :description, class: "label" %>
+    <%= form.text_area :description, class: "input input-focus" %>
   </div>
 
-  <div>
-    <%= form.label :group, style: "display: block" %>
-    <%= form.text_field :group %>
+  <div class="flex flex-col gap-4 my-5">
+    <%= form.label :group, class: "label" %>
+    <%= form.text_field :group, class: "input input-focus" %>
   </div>
 
-  <div>
-    <%= form.label :score, style: "display: block" %>
-    <%= form.text_field :score %>
+  <div class="flex flex-col gap-4 my-5">
+    <%= form.label :score, class: "label" %>
+    <%= form.number_field :score, class: "input input-focus" %>
   </div>
 
-  <div>
-    <%= form.label :display_value, style: "display: block" %>
-    <%= form.text_field :display_value %>
+  <div class="flex flex-col gap-4 my-5">
+    <%= form.label :display_value, class: "label" %>
+    <%= form.text_field :display_value, class: "input input-focus" %>
   </div>
 
-  <div>
-    <%= form.label :correct_value, style: "display: block" %>
-    <%= form.text_field :correct_value %>
+  <div class="flex flex-col gap-4 my-5">
+    <%= form.label :correct_value, class: "label" %>
+    <%= form.text_field :correct_value, class: "input input-focus" %>
   </div>
 
-  <div>
-    <%= form.submit %>
+  <div class="flex justify-between my-5">
+    <%= form.submit "Save Item", class: "btn btn-create btn-create-hover btn-create-focus transition-base" %>
+    <%= link_to "Back", items_path, class: "w-auto btn btn-back btn-back-hover btn-back-focus transition-base" %>
   </div>
 <% end %>

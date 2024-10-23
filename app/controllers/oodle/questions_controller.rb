@@ -66,7 +66,8 @@ module Oodle
 
       # Only allow a list of trusted parameters through.
       def question_params
-        params.expect(question: [ :name, :description, :question_type, :scorable, :score ])
+        params.expect(question: [ :name, :description, :question_type, :scorable, :score,
+                                  question_item_ids: [] ])
       end
   end
 end

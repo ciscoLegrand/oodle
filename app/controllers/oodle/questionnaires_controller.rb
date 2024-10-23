@@ -21,10 +21,16 @@ module Oodle
     # GET /questionnaires/new
     def new
       @questionnaire = Questionnaire.new(start_date: Time.zone.now, end_date: Time.zone.now + 1.day)
+      @free_text = [ "free_text", Question.free_text ]
+      @simple = [ "simple", Question.simple ]
+      @multiple = [ "multiple", Question.multiple ]
     end
 
     # GET /questionnaires/1/edit
     def edit
+      @free_text = [ "free_text", Question.free_text ]
+      @simple = [ "simple", Question.simple ]
+      @multiple = [ "multiple", Question.multiple ]
     end
 
     # POST /questionnaires
@@ -61,7 +67,7 @@ module Oodle
 
       # Only allow a list of trusted parameters through.
       def questionnaire_params
-        params.expect(questionnaire: [ :name, :start_date, :end_date, :duration, :manager_id ])
+        params.expect(questionnaire: [ :name, :start_date, :end_date, :duration, :manager_id, question_ids: [] ])
       end
   end
 end

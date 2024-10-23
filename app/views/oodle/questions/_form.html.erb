@@ -1,8 +1,7 @@
-<%= form_with(model: question) do |form| %>
+<%= form_with(model: question, html: { class: "card p-8" }) do |form| %>
   <% if question.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(question.errors.count, "error") %> prohibited this question from being saved:</h2>
-
       <ul>
         <% question.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -11,32 +10,56 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+  <!-- Nombre de la pregunta -->
+  <div class="flex flex-col gap-4 my-5">
+    <%= form.label :name, class: "label" %>
+    <%= form.text_field :name, class: "input input-focus" %>
   </div>
 
-  <div>
-    <%= form.label :description, style: "display: block" %>
-    <%= form.textarea :description %>
+  <!-- Descripción de la pregunta -->
+  <div class="flex flex-col gap-4 my-5">
+    <%= form.label :description, class: "label" %>
+    <%= form.text_area :description, class: "input input-focus" %>
   </div>
 
-  <div>
-    <%= form.label :question_type, style: "display: block" %>
-    <%= form.text_field :question_type %>
+  <!-- Tipo de pregunta -->
+  <div class="flex flex-col gap-4 my-5">
+    <%= form.label :question_type, class: "label" %>
+    <%= form.select :question_type, Oodle::Question.question_types.keys.map { |k| [k.titleize, k] }, {}, class: "input input-focus" %>
   </div>
 
-  <div>
-    <%= form.label :scorable, style: "display: block" %>
-    <%= form.checkbox :scorable %>
+  <!-- Scorable -->
+  <div class="flex items-center gap-4 my-5">
+    <%= form.label :scorable, class: "label" %>
+    <%= form.check_box :scorable, class: "checkbox" %>
   </div>
 
-  <div>
-    <%= form.label :score, style: "display: block" %>
-    <%= form.text_field :score %>
+  <!-- Puntuación de la pregunta -->
+  <div class="flex flex-col gap-4 my-5">
+    <%= form.label :score, class: "label" %>
+    <%= form.number_field :score, class: "input input-focus" %>
   </div>
 
-  <div>
-    <%= form.submit %>
+  <!-- Seleccionar Items para la pregunta -->
+  <div class="grid grid-cols-3 gap-4 my-5">
+    <h3 class="text-lg font-semibold col-span-3">Select Items</h3>
+    <% Oodle::Item.all.each do |item| %>
+      <div class="col-span-1 card px-3 py-1.5 flex items-center gap-4">
+        <%= check_box_tag "question[item_ids][]", item.id, question.item_ids.include?(item.id), id: "item_#{item.id}", class: "checkbox" %>
+        <div class="flex flex-col gap-4">
+          <%= label_tag "item_#{item.id}", item.name, class: "label" %>
+          <div class="flex flex-col gap-4">
+            <span>D: <%= item.display_value %></span>
+            <span>C: <%= item.correct_value %></span>
+          </div>
+        </div>
+
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Botón de envío -->
+  <div class="flex justify-between my-5">
+    <%= form.submit "Save Question", class: "btn btn-create btn-create-hover btn-create-focus transition-base" %>
   </div>
 <% end %>

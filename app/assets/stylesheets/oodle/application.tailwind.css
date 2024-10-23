@@ -155,7 +155,7 @@
 
   /*cards*/
   .card {
-    @apply max-w-lg mx-auto bg-white shadow-lg rounded-lg overflow-hidden;
+    @apply w-full mx-auto bg-white shadow-lg rounded-lg overflow-hidden;
   }
 
   .card-body {

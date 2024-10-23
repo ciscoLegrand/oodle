@@ -1,6 +1,8 @@
 <% content_for :title, "New answer" %>
 
-<div class="w-1/3 mx-auto flex flex-col justify-center gap-4">
-  <h1 class="text-3xl font-semibold text-gray-800">Answer</h1>
+<section class="container mx-auto px-4">
+  <h1 class="text-3xl font-semibold text-gray-800">New Answer</h1>
+<%= turbo_frame_tag "new_answer" do %>
   <%= render "form", answer: @answer, question: @question, questionnaire: @questionnaire %>
-</div>
+<% end  %>
+</section>

@@ -39,7 +39,24 @@
               value: questionnaire.end_date.strftime("%Y-%m-%d %H:%M"),
               class: "input input-focus" %>
     </div>
+  </div>
 
+  <div class="grid grid-cols-3 gap-4">
+    <% [@free_text, @simple, @multiple].each do |title, questions| %>
+    <div class="my-5">
+      <h3 class="text-lg font-semibold">
+        <%= title.capitalize %>
+      </h3>
+        <% questions.each do |question| %>
+          <div class="col-span-1 flex flex-col items-center gap-4 my-4">
+            <div class="card px-4 py-1.5 gap-4">
+              <%= check_box_tag "questionnaire[question_ids][]", question.id, questionnaire.question_ids.include?(question.id), id: "question_#{question.id}", class: "checkbox" %>
+              <%= label_tag "question_#{question.id}", question.description, class: "label" %>
+            </div>
+          </div>
+        <% end %>
+    </div>
+    <% end %>
   </div>
 
   <div class="flex justify-between my-5">

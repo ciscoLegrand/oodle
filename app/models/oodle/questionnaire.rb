@@ -7,6 +7,8 @@ module Oodle
     has_many :user_questionnaires
     has_many :answers
 
+    accepts_nested_attributes_for :questionnaire_questions, allow_destroy: true
+
     validates :name, :start_date, :end_date, :manager, presence: true
     validates :duration,
               numericality: {

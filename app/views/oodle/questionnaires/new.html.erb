@@ -1,6 +1,7 @@
 <% content_for :title, "New questionnaire" %>
 
 <section class="container mx-auto px-4">
+  <h1 class="text-3xl font-semibold text-gray-800">New Question</h1>
 <%= turbo_frame_tag "new_quesitonnaire" do %>
   <%= render "form", questionnaire: @questionnaire %>
 <% end  %>

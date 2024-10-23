@@ -6,6 +6,8 @@ module Oodle
     has_many :items, through: :question_items, source: :item
     has_many :answers
 
+    accepts_nested_attributes_for :question_items, allow_destroy: true
+
     enum question_type: { free_text: 0, simple: 1, multiple: 2 }
 
     validates :name, :question_type, presence: true
