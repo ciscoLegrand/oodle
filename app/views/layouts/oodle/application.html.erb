@@ -25,6 +25,7 @@
               <%= link_to "Questionnaires", oodle.questionnaires_path, class: "font-bold #{'nav-link-active' if request.url.include?('questionnaires')}" %>
               <%= link_to "Questions", oodle.questions_path, class: "font-bold #{'nav-link-active' if request.url.include?('questions')}" %>
               <%= link_to "Items", oodle.items_path, class: "font-bold #{'nav-link-active' if request.url.include?('items')}" %>
+              <%= link_to "Answers", oodle.answers_path, class: "font-bold #{'nav-link-active' if request.url.include?('answers')}" %>
             <% else %>
               <%= link_to "Questionnaires", oodle.questionnaires_path, class: "font-bold #{'nav-link-active' if request.url.include?('questionnaires')}" %>
               <%#= link_to "My questionnaires", oodle.user_path(Current.user), class: "font-bold" %>

@@ -1,16 +1,23 @@
-<p style="color: green"><%= notice %></p>
-
 <% content_for :title, "answers" %>
 
 <section class="container flex flex-col gap-4">
 
   <div class="flex justify-between gap-4 my-8">
-    <h1 class="text-3xl font-semibold text-gray-800">answers</h1>
-    <%= link_to "New answer", new_answer_path, class: "px-3 py-1.5 border border-blue-500 text-blue-500 hover:bg-blue-200 hover:text-blue-700 rounded-md font-medium" %>
+    <h1 class="text-3xl font-semibold text-gray-800">Answers: <%= @pagy.count %></h1>
   </div>
 
-  <div id="answers" class="grid grid-cols-4 gap-4 ">
+  <div class="flex justify-between items-center gap-4">
+    <div class="flex items-center gap-4">
+      <% @students.each do |id, email| %>
+        <%= link_to email,
+              answers_path(student_id: id),
+              class: "rounded-lg py-3 px-5 bg-blue-100 text-blue-500 hover:bg-blue-200 inline-block font-medium #{'bg-blue-500 text-white' if params[:student_id].eql?(id)}" %>
+      <% end %>
+    </div>
+    <%= render "layouts/shared/pagy", pagy: @pagy if @pagy.present? %>
+  </div>
+
+  <div id="answers" class="w-full grid grid-cols-3 gap-4 ">
     <%= render @answers%>
   </div>
 </section>
-
