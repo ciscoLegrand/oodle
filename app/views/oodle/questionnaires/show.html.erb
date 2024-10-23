@@ -1,11 +1,43 @@
-<div class="flex flex-col gap-4 my-4">
-  <%= render @questionnaire %>
+  
+<% if Current.user.manager? %>
+  <div class="flex flex-col gap-4 my-4">
+    <%= render @questionnaire %>
 
-  <div class="flex flex-col gap-4">
-    <h1 class="text-xl">Questions: <%= @questionnaire.questions.count %></h1>
+    <div class="flex flex-col gap-4">
+      <h1 class="text-xl">Questions: <%= @questionnaire.questions.count %></h1>
 
-    <div id="questions" class="min-w-full grid grid-cols-3 gap-4">
-      <%= render partial: "oodle/questions/question", collection: @questionnaire.questions, as: :question %>
+      <div id="questions" class="min-w-full grid grid-cols-3 gap-4">
+        <%= render partial: "oodle/questions/question", collection: @questionnaire.questions, as: :question %>
+      </div>
     </div>
   </div>
-</div>
+<% else %>
+  <div class="grid grid-cols-4 gap-4 relative">
+    <div class="col-span-1 sticky top-0">
+      <%= render @questionnaire %>
+    </div>
+    <div class="col-span-3 flex flex-col gap-6">
+      <% @questionnaire.questions.each do |q| %>
+        <% @answer = Current.user
+                            .answers
+                            .find_by(questionnaire_id: params[:id],question_id: q.id) %>
+        <% if @answer.present? %>            
+            <%= render @answer %>
+        <% else %>
+          <%= render Oodle::CardComponent.new(
+                      title: q.description,
+                      id: dom_id(q),
+                      actions: []
+                    ) do %>
+            <%= render "oodle/answers/form",
+                answer: Oodle::Answer.new,
+                questionnaire: @questionnaire,
+                question: q %>
+          <% end %>
+        
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+

@@ -4,11 +4,12 @@ manager_actions = [
   link_to("Edit", edit_question_path(question), data: { turbo_frame: "_top" }, class: "btn btn-edit btn-edit-hover btn-edit-focus transition-base", aria: { label: "Edit question" }),
   button_to("Destroy", question, method: :delete, data: { turbo_confirm: "Are you sure?", turbo_frame: "_top" }, class: "btn btn-delete btn-delete-hover btn-delete-focus transition-base", aria: { label: "Delete question" })
 ]
+student_actions = [link_to("Answered", new_answer_path(questionnaire_id: params[:id], question_id: question.id), data: { turbo_frame: "_top" }, class: "btn btn-show btn-show-hover btn-show-focus transition-base")]
 back_button = link_to("Back", questions_path, class: "w-auto btn btn-back btn-back-hover btn-back-focus transition-base")
 
 actions = []
 actions = [show_action] unless action_name == "show"
-actions.concat(manager_actions) if Current.user.manager?
+Current.user.manager? ? actions.concat(manager_actions) : actions.concat(student_actions)
 actions.concat([back_button]) if action_name == "show"
 %>
 
@@ -18,7 +19,7 @@ actions.concat([back_button]) if action_name == "show"
     actions: actions
   ) do %>
 
-  <section id="<%= dom_id(question) %>" class=" rounded-lg relative px-8 py-6">
+  <section id="<%= dom_id(question) %>" class=" rounded-lg relative px-8 py-6 <%= Current.user.answers.find_by(questionnaire_id: params[:id],question_id: question.id).present? ? "bg-blue-100" : "" %>">
     <p class="my-5 flex flex-col gap-4">
       <strong class="label">Description:</strong>
       <%= question.description %>

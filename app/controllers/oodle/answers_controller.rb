@@ -7,7 +7,7 @@ module Oodle
       if Current.user.manager?
         @students = Current.user.students.pluck(:id, :email_address)
         @answers = Answer.where(user_id: @students[0])
-      elsif Current.user.studend? || Current.user.user?
+      elsif Current.user.student? || Current.user.user?
         @answers = Current.user.answers
       else
         @answers = Answer.all

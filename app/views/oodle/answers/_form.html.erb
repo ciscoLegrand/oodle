@@ -9,11 +9,7 @@
       </ul>
     </div>
   <% end %>
-
-  <h1 class="text-xl font-bold">
-    <%= question.description %>
-  </h1>
-
+  
   <div class="my-5 flex flex-col gap-4">
     <% if question.free_text? %>
       <%= form.text_area :result, rows: 10, class: "w-full" %>
@@ -37,6 +33,5 @@
   <div class="inline">
     <%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
     <%= form.submit 'Next', commit: :next, class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
-    <%= link_to "Back to questionnaire", questionnaire_path(@questionnaire.id), class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
   </div>
 <% end %>

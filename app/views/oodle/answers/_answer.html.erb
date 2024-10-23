@@ -9,7 +9,7 @@ back_button = link_to("Back", answers_path, class: "w-auto btn btn-back btn-back
 actions = []
 actions = [show_action] unless action_name == "show"
 actions.concat(manager_actions) if Current.user.manager?
-actions.concat([back_button]) if action_name == "show"
+# actions.concat([back_button]) if action_name == "show"
 %>
 
 <%= render Oodle::CardComponent.new(
