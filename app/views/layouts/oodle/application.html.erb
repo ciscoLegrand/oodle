@@ -22,13 +22,15 @@
 
           <% if request.path.include?("oodle") %>
             <% if Current.user.manager? %>
+              <%= link_to "Dashboard", oodle.dashboard_path, class: "font-bold #{'nav-link-active' if request.url.include?('dashboard')}" %>
               <%= link_to "Questionnaires", oodle.questionnaires_path, class: "font-bold #{'nav-link-active' if request.url.include?('questionnaires')}" %>
               <%= link_to "Questions", oodle.questions_path, class: "font-bold #{'nav-link-active' if request.url.include?('questions')}" %>
               <%= link_to "Items", oodle.items_path, class: "font-bold #{'nav-link-active' if request.url.include?('items')}" %>
               <%= link_to "Answers", oodle.answers_path, class: "font-bold #{'nav-link-active' if request.url.include?('answers')}" %>
+              <%= link_to "Users", oodle.users_path, class: "font-bold #{'nav-link-active' if request.url.include?('users')}" %>
             <% else %>
               <%= link_to "My Questionnaires", oodle.questionnaires_path(sorted: 'open'), class: "font-bold #{'nav-link-active' if request.url.include?('questionnaires')}" %>
-              <%#= link_to "My questionnaires", oodle.user_path(Current.user), class: "font-bold" %>
+              <%= link_to "Profile", user_path(Current.user.id), class: "font-bold" unless Current.user.manager? %>
             <% end %>
           <% end %>
         <% end %>

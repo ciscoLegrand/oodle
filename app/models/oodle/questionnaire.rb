@@ -27,7 +27,7 @@ module Oodle
     def average_score = user_questionnaires.average(:score).to_f || 0.00
 
     def completion_percentage
-      retunr 0.00 if user_questionnaires.blank?
+      return 0.00 if user_questionnaires.blank?
 
       percentage = (user_questionnaires.completed.count.to_f / user_questionnaires.count) * 100
       percentage.round(2)
