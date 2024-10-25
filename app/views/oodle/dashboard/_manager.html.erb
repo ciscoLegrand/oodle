@@ -1,0 +1,94 @@
+<div class="container mx-auto px-4 py-6">
+  <h1 class="text-3xl font-bold mb-6">Manager Dashboard</h1>
+
+  <!-- Questionnaires Overview -->
+  <section class="mb-10">
+    <div class="flex justify-between my-4"> 
+      <h2 class="text-2xl font-semibold mb-4">Questionnaires Overview</h2>
+      <%= link_to "New Questionnaire", new_questionnaire_path, class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-flex items-center" %>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @questionnaires.each do |questionnaire| %>
+        <div class="bg-white shadow-lg rounded-lg p-6">
+          <h3 class="text-xl font-bold mb-2"><%= questionnaire.name %></h3>
+          <p class="text-gray-600">Start Date: <%= questionnaire.start_date %></p>
+          <p class="text-gray-600">End Date: <%= questionnaire.end_date %></p>
+          <p class="text-gray-600">Completion: <%= number_to_percentage(questionnaire.completion_percentage, precision: 2) %></p>
+          <p class="text-gray-600">Average Score: <%= questionnaire.average_score.round(2) %></p>
+          <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+            <div class="bg-blue-500 h-2.5 rounded-full" style="width: <%= questionnaire.completion_percentage %>%"></div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </section>
+
+  <!-- Students Progress -->
+  <section class="mb-10">
+    <h2 class="text-2xl font-semibold mb-4">Students Progress</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @students.each do |student| %>
+        <div class="bg-white shadow-lg rounded-lg p-6">
+          <h3 class="text-xl font-bold mb-2"><%= student.email_address %></h3>
+          <p class="text-gray-600">Total Progress: <%= student.user_questionnaires.sum(&:progress).round(2) %>%</p>
+          <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+            <div class="bg-green-500 h-2.5 rounded-full" style="width: <%= student.user_questionnaires.sum(&:progress).round(2) %>%"></div>
+          </div>
+          <p class="text-gray-600">Completed Questionnaires: <%= student.user_questionnaires.where(completed: true).count %></p>
+          <p class="text-gray-600">Incomplete Questionnaires: <%= student.user_questionnaires.where(completed: false).count %></p>
+          <p class="text-gray-600">Total Score: <%= student.user_questionnaires.sum(&:score).round(2) %></p>
+        </div>
+      <% end %>
+    </div>
+  </section>
+
+  <!-- User Questionnaires Performance -->
+  <section class="mb-10">
+    <h2 class="text-2xl font-semibold mb-4">User Questionnaires Performance</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @user_questionnaires.each do |user_questionnaire| %>
+        <div class="bg-white shadow-lg rounded-lg p-6">
+          <h3 class="text-xl font-bold mb-2"><%= user_questionnaire.user.email_address %></h3>
+          <p class="text-gray-600">Questionnaire: <%= user_questionnaire.questionnaire.name %></p>
+          <p class="text-gray-600">Progress: <%= user_questionnaire.progress.round(2) %>%</p>
+          <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+            <div class="bg-yellow-500 h-2.5 rounded-full" style="width: <%= user_questionnaire.progress.round(2) %>%"></div>
+          </div>
+          <p class="text-gray-600">Total Score: <%= user_questionnaire.score %></p>
+          <p class="text-gray-600"><%= user_questionnaire.completed? ? 'Completed' : 'In Progress' %></p>
+        </div>
+      <% end %>
+    </div>
+  </section>
+
+  <!-- Questions Difficulty Overview -->
+  <section class="mb-10">
+    <h2 class="text-2xl font-semibold mb-4">Questions Difficulty Overview</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @questions.each do |question| %>
+        <div class="bg-white shadow-lg rounded-lg p-6">
+          <h3 class="text-xl font-bold mb-2"><%= question.name %></h3>
+          <p class="text-gray-600">Description: <%= question.description %></p>
+          <p class="text-gray-600">Question Type: <%= question.question_type %></p>
+          <p class="text-gray-600">Score: <%= question.score %></p>
+          <p class="text-gray-600">Difficulty Level: <%= question.difficulty %></p>
+        </div>
+      <% end %>
+    </div>
+  </section>
+</div>
+
+<!-- Optional Script for Progress Bar Animation -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const progressBars = document.querySelectorAll('.bg-green-500, .bg-yellow-500, .bg-blue-500');
+    progressBars.forEach(function(bar) {
+      const width = bar.style.width;
+      bar.style.width = '0%';
+      setTimeout(function() {
+        bar.style.transition = 'width 1s';
+        bar.style.width = width;
+      }, 500); // Adds delay for smooth animation
+    });
+  });
+</script>

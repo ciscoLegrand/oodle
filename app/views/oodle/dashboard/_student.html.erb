@@ -1,0 +1,90 @@
+<div class="container mx-auto px-4 py-6">
+  <h1 class="text-3xl font-bold mb-6">Student Dashboard</h1>
+
+  <!-- Completed Questionnaires -->
+  <section class="mb-10">
+    <h2 class="text-2xl font-semibold mb-4">Completed Questionnaires</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @completed_questionnaires.each do |questionnaire| %>
+        <div class="bg-white shadow-lg rounded-lg p-6">
+          <h3 class="text-xl font-bold mb-2"><%= questionnaire.questionnaire.name %></h3>
+          <p class="text-gray-600 mb-2">Progreso completado: <%= questionnaire.progress %>%</p>
+          <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+            <div class="bg-green-500 h-2.5 rounded-full" style="width: <%= questionnaire.progress %>%"></div>
+          </div>
+          <p class="text-gray-600 mb-2">Puntaje total: <%= questionnaire.score %></p>
+          <p class="text-gray-600 mb-2">Completado en: <%= duration_between(questionnaire.started_at, questionnaire.completed_at) %></p>
+        </div>
+      <% end %>
+    </div>
+  </section>
+
+  <!-- Incomplete Questionnaires -->
+  <section class="mb-10">
+    <h2 class="text-2xl font-semibold mb-4">Incomplete Questionnaires</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @incompleted_questionnaires.each do |questionnaire| %>
+        <div class="bg-white shadow-lg rounded-lg p-6">
+          <h3 class="text-xl font-bold mb-2"><%= questionnaire.questionnaire.name %></h3>
+          <p class="text-gray-600 mb-2">Progreso actual: <%= questionnaire.progress %>%</p>
+          <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+            <div class="bg-yellow-500 h-2.5 rounded-full" style="width: <%= questionnaire.progress %>%"></div>
+          </div>
+          <p class="text-gray-600 mb-2">Fecha límite: <%= questionnaire.questionnaire.end_date %></p>
+        </div>
+      <% end %>
+    </div>
+  </section>
+
+  <!-- Score Distribution (with labels) -->
+  <section class="mb-10">
+    <h2 class="text-2xl font-semibold mb-4">Score Distribution Overview</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @user_questionnaires.each do |user_questionnaire| %>
+        <div class="bg-white shadow-lg rounded-lg p-6">
+          <h3 class="text-xl font-bold mb-2"><%= user_questionnaire.questionnaire.name %> - Puntaje por Pregunta</h3>
+          <div class="relative h-40 w-full bg-gray-100 rounded-lg mb-4">
+            <% user_questionnaire.score_distribution.each_with_index do |(question_id, score), index| %>
+              <div class="flex items-center">
+                <span class="text-sm text-gray-600 mr-2">Pregunta <%= index + 1 %>:</span>
+                <div class="bg-blue-500 h-6 mb-2" style="width: <%= (score.to_f / 100) * 100 %>%"></div>
+                <span class="ml-2 text-sm text-gray-600"><%= score %> pts</span>
+              </div>
+            <% end %>
+          </div>
+          <p class="text-gray-600">Puntaje Promedio: <%= user_questionnaire.score %></p>
+        </div>
+      <% end %>
+    </div>
+  </section>
+</div>
+
+<!-- Script for smooth loading bars -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const barCharts = document.querySelectorAll('.relative.h-40 .bg-blue-500');
+    barCharts.forEach(function(bar) {
+      const width = bar.style.width;
+      setTimeout(function() {
+        bar.style.transition = 'width 1s';
+        bar.style.width = width;
+      }, 500);
+    });
+  });
+</script>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: white;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  .card:hover {
+    transform: translateY(-5px);
+    transition: transform 0.3s ease-in-out;
+  }
+</style>
