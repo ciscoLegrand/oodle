@@ -1,0 +1,131 @@
+<% 
+show_action = link_to("Show", user, data: { turbo_frame: "_top" }, class: "btn btn-show btn-show-hover btn-show-focus transition-base")
+back_button = link_to("Back", users_path, class: "w-auto btn btn-back btn-back-hover btn-back-focus transition-base")
+
+actions = []
+actions = [show_action] unless action_name == "show"
+actions.concat([back_button]) if action_name == "show"
+%>
+
+<%= turbo_frame_tag dom_id(user) do %>
+  <article class="card shadow-hover">
+
+
+    <header class="flex justify-between items-center card-header px-8 py-4">
+      <h2 class="card-title">
+        <%= user.email_address %>
+      </h2>
+      <% if actions.present? %>
+        <div class="card-footer card-actions">
+          <% actions.each do |action| %>
+            <%= action %>
+          <% end %>
+        </footer>
+      <% end %>
+    </header>
+
+    
+    <% if action_name == "show" %>
+      <div id="<%= dom_id(user) %>" class=" rounded-lg relative px-8 py-6">
+        <h2>Questionnaires</h2>
+
+        <% if @questionnaires_progress_and_scores.present? %>
+          <% @questionnaires_progress_and_scores.each do |data| %>
+            <div id="<%= dom_id(data[:questionnaire]) %>" class="border border-gray-400 rounded-lg p-4 my-4">
+              <p class="my-5">
+                <strong class="block font-medium mb-1">Assignment:</strong>
+                <%= data[:questionnaire].name %>
+              </p>
+
+              <p class="my-5">
+                <strong class="block font-medium mb-1">Progress:</strong>
+                <%= data[:progress] %>% 
+              </p>
+
+              <p class="my-5">
+                <strong class="block font-medium mb-1">Total Score:</strong>
+                <%= data[:total_score] %>
+              </p>
+
+              <h3 class="mt-8 mb-4">Questions and Answers:</h3>
+
+              <div class="grid grid-cols-2 gap-6">
+                <% data[:questionnaire].questions.each do |question| %>
+                  <!-- Question Section -->
+                  <div id="<%= dom_id(question) %>" class="border border-gray-400 rounded-lg p-4 my-4">
+                    <p class="my-5">
+                      <strong class="block font-medium mb-1">Name:</strong>
+                      <%= question.name %>
+                    </p>
+
+                    <p class="my-5">
+                      <strong class="block font-medium mb-1">Description:</strong>
+                      <%= question.description %>
+                    </p>
+
+                    <p class="my-5">
+                      <strong class="block font-medium mb-1">Question Type:</strong>
+                      <%= question.question_type %>
+                    </p>
+
+                    <p class="my-5">
+                      <strong class="block font-medium mb-1">Items:</strong>
+                      <% question.items.each do |item| %>
+                        <span><%= item.display_value %> (Correct: <%= item.correct_value ? 'Yes' : 'No' %>, Score: <%= item.score %>)</span><br>
+                      <% end %>
+                    </p>
+                  </div>
+
+                  <!-- Answer Section -->
+                  <% user_answer = user.answers.find_by(question: question) %>
+                  <div class="border border-gray-400 rounded-lg p-4 my-4">
+                    <% if user_answer.present? %>
+                      <p class="my-5">
+                        <strong class="block font-medium mb-1">Answer for <%= user_answer.question.name %>:</strong>
+                      </p>
+                      <p class="my-5">
+                        <strong class="block font-medium mb-1">Qeustion description <%= user_answer.question.description %>:</strong>
+                        <div>
+                          Response: <%= user_answer.result %>
+                        </div>
+                        <div>
+                          Correct values: 
+                          <ul class="flex flex-col gap-2">
+                            <% user_answer.question.items.each do |item| %>
+                              <% next unless item.correct_value.eql?('t') %>
+                              <li>
+                                <span><%= item.display_value %></span> || 
+                                <span><%= item.correct_value %></span>
+                              </li>
+                            <% end %>
+                          </ul>
+                          
+                        </div>
+                      </p>
+                      <p class="my-5">
+                        <strong class="block font-medium mb-1">Score:</strong>
+                        <%= user_answer.score %>
+                      </p>
+
+                      <p class="my-5">
+                        <strong class="block font-medium mb-1">Answered At:</strong>
+                        <%= user_answer.answered_at %>
+                      </p>
+                    <% else %>
+                      <p>No answer provided.</p>
+                    <% end %>
+                  </div>
+                <% end %>
+              </div>
+
+            </div>
+          <% end %>
+        <% else %>
+          No data is provided
+        <% end %>
+      </div>
+    <% end %>
+    
+  </article>
+<% end %>
+
