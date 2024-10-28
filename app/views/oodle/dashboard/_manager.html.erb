@@ -30,13 +30,13 @@
       <% @students.each do |student| %>
         <div class="bg-white shadow-lg rounded-lg p-6">
           <h3 class="text-xl font-bold mb-2"><%= student.email_address %></h3>
-          <p class="text-gray-600">Total Progress: <%= student.user_questionnaires.sum(&:progress).round(2) %>%</p>
+          <% calculated_progress = student.user_questionnaires.count.positive? ? student.user_questionnaires.sum(&:progress) / student.user_questionnaires.count : 0%>
+          <p class="text-gray-600">Total Progress: <%= number_to_percentage(calculated_progress, precision: 2) %></p>
           <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
-            <div class="bg-green-500 h-2.5 rounded-full" style="width: <%= student.user_questionnaires.sum(&:progress).round(2) %>%"></div>
+            <div class="bg-green-500 h-2.5 rounded-full" style="width: <%= calculated_progress.round(2) %>%"></div>
           </div>
-          <p class="text-gray-600">Completed Questionnaires: <%= student.user_questionnaires.where(completed: true).count %></p>
-          <p class="text-gray-600">Incomplete Questionnaires: <%= student.user_questionnaires.where(completed: false).count %></p>
-          <p class="text-gray-600">Total Score: <%= student.user_questionnaires.sum(&:score).round(2) %></p>
+          <p class="text-gray-600">Completed Questionnaires: <%= student.user_questionnaires.completed.count %></p>
+          <p class="text-gray-600">Incomplete Questionnaires: <%= student.user_questionnaires.incompleted.count %></p>
         </div>
       <% end %>
     </div>
@@ -54,7 +54,8 @@
           <div class="w-full bg-gray-200 rounded-full h-2.5 mt-2">
             <div class="bg-yellow-500 h-2.5 rounded-full" style="width: <%= user_questionnaire.progress.round(2) %>%"></div>
           </div>
-          <p class="text-gray-600">Total Score: <%= user_questionnaire.score %></p>
+          <p class="text-gray-600">Answers Score: <%= user_questionnaire.score %></p>
+          <p class="text-gray600">Total Score: <%= user_questionnaire.questions.sum(&:score).round(2) %></p>
           <p class="text-gray-600"><%= user_questionnaire.completed? ? 'Completed' : 'In Progress' %></p>
         </div>
       <% end %>

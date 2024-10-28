@@ -4,9 +4,10 @@ module Oodle
     belongs_to :questionnaire, class_name: "Oodle::Questionnaire"
 
     has_many :answers, through: :questionnaire
+    has_many :questions, through: :questionnaire
 
     scope :completed, -> { where(completed: true, progress: 100) }
-    scope :incompleted, -> { where(completed: false).where("progress < ?", 100) }
+    scope :incompleted, -> { where("progress < ?", 100) }
 
     def update_progress = update! progress: ((answers.count.to_f / questionnaire.questions.count) * 100)
 

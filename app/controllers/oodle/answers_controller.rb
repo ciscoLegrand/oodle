@@ -6,7 +6,8 @@ module Oodle
     def index
       if Current.user.manager?
         @students = Current.user.students.pluck(:id, :email_address)
-        @answers = Answer.where(user_id: @students[0])
+        data = params[:student_id].present? ? [ params[:student_id] ] : Current.user.students.pluck(:id)
+        @answers = Answer.where(user_id: data)
       elsif Current.user.student? || Current.user.user?
         @answers = Current.user.answers
       else

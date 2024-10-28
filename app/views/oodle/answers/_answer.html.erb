@@ -2,7 +2,6 @@
 show_action = link_to("Show", answer, data: { turbo_frame: "_top" }, class: "btn btn-show btn-show-hover btn-show-focus transition-base")
 manager_actions = [
   link_to("Edit", edit_answer_path(answer), data: { turbo_frame: "_top" }, class: "btn btn-edit btn-edit-hover btn-edit-focus transition-base", aria: { label: "Edit answer" }),
-  button_to("Destroy", answer, method: :delete, data: { turbo_confirm: "Are you sure?", turbo_frame: "_top" }, class: "btn btn-delete btn-delete-hover btn-delete-focus transition-base", aria: { label: "Delete answer" })
 ]
 back_button = link_to("Back", answers_path, class: "w-auto btn btn-back btn-back-hover btn-back-focus transition-base")
 
@@ -12,36 +11,21 @@ actions.concat(manager_actions) if Current.user.manager?
 # actions.concat([back_button]) if action_name == "show"
 %>
 
-<%= render Oodle::CardComponent.new(
-    title: answer.user.email_address,
-    id: dom_id(answer),
-    actions: actions
-  ) do %>
-
-  <section id="<%= dom_id(answer) %>" class=" rounded-lg relative px-8 py-6">
-    <p class="my-5 flex flex-col gap-4">
-      <strong>Questionnaire:</strong>
-      <%= answer.questionnaire.name %>
-    </p>
-
-    <p class="my-5 flex flex-col gap-4">
-      <strong class="label">Question: <%= answer.question.name%></strong>
-      <%= answer.question.description %>
-    </p>
-
-    <p class="my-5 flex gap-4">
-      <strong class="label">Response:</strong>
-      <%= answer.result['selected'] %>
-    </p>
-
-    <p class="my-5 flex gap-4">
-      <strong class="label">Score:</strong>
-      <%= answer.score %>
-    </p>
-
-    <p class="my-5 flex gap-4">
-      <strong class="label">Answered at:</strong>
-      <%= answer.answered_at.strftime("%d-%m-%y %H:%M") %>
-    </p>
-  </section>
-<% end %>
+<div class="grid grid-cols-9 gap-4 p-4 items-center text-sm hover:bg-gray-50">
+  <div class="text-blue-600 hover:underline">
+    <%= link_to answer.user.email_address, user_path(answer.user) %>
+  </div>
+  <div class="text-blue-600 hover:underline">
+    <%= link_to answer.questionnaire.name, questionnaire_path(answer.questionnaire) %>
+  </div>
+  <div class="col-span-2"><%= answer.question.description %></div>
+  <div class="text-right"><%= answer.result["selected"].is_a?(Array) ? answer.result["selected"].join(", ") : answer.result["selected"] %></div>
+  <div class="text-right"><%= answer.question.items.map(&:correct_value).uniq.join(", ") %></div>
+  <div class="text-right"><%= number_with_precision(answer.score, precision: 2) %></div>
+  <div class="text-right"><%= answer.answered_at.strftime("%d-%m-%y %H:%M") %></div>
+  <div class="flex justify-end space-x-2">
+    <% actions.each do |action| %>
+      <%= action %>
+    <% end %>
+  </div>
+</div>
