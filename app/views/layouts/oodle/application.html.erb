@@ -4,10 +4,12 @@
   <title>Oodle</title>
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
+  
+  <%= yield :head %>
 
   <%= stylesheet_link_tag "oodle/application.tailwind", media: "all", "data-turbo-track": "reload" %>
   <%= stylesheet_link_tag "oodle", "data-turbo-track": "reload" %>
-  <%= yield :head %>
+  <%= javascript_importmap_tags %>
 </head>
 
 <body class="bg-slate-100">

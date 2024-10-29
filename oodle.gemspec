@@ -25,4 +25,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "tailwindcss-rails"
   spec.add_dependency "pagy"
   spec.add_dependency "view_component"
+  spec.add_dependency 'stimulus-rails'
+  spec.add_dependency 'turbo-rails'
+  spec.add_dependency 'importmap-rails'
 end
