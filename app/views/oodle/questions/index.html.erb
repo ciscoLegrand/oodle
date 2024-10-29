@@ -18,7 +18,17 @@
     <%= render "layouts/shared/pagy", pagy: @pagy if @pagy.present? %>
   </div>
 
-  <div id="questions" class="w-full grid grid-cols-3 gap-4 ">
-    <%= render @questions%>
+  <div id="questions" class="bg-white shadow-md rounded-lg overflow-hidden my-8">
+    <div class="grid grid-cols-9 gap-4 p-4 bg-gray-100 font-semibold text-sm text-gray-700">
+      <div class="col-span-2">Name</div>
+      <div class="col-span-2">Description</div>
+      <div class="text-right">Type</div>
+      <div class="text-right">Score</div>
+      <div class="text-right">Items</div>
+      <div class="col-span-2 text-right">Actions</div>
+    </div>
+    <div class="divide-y divide-gray-200">
+      <%= render partial: 'question', collection: @questions, as: :question %>
+    </div>
   </div>
 </section>

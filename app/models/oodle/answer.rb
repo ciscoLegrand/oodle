@@ -4,7 +4,8 @@ module Oodle
     belongs_to :question, class_name: "Oodle::Question"
     belongs_to :questionnaire, class_name: "Oodle::Questionnaire"
 
-    validates :result, presence: true
+    validates :result, :answered_at, presence: true
+    validates :question, presence: true, uniqueness: { scope: [ :questionnaire_id, :user_id ] }
 
     after_create :update_questionnaire_progress
 

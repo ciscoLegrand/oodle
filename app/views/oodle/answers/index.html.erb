@@ -8,16 +8,19 @@
 
   <div class="flex justify-between items-center gap-4">
     <div class="flex items-center gap-4">
-      <% @students.each do |id, email| %>
-        <%= link_to email,
-              answers_path(student_id: id),
-              class: "rounded-lg py-3 px-5 bg-blue-100 text-blue-500 hover:bg-blue-200 inline-block font-medium #{'bg-blue-500 text-white' if params[:student_id].eql?(id)}" %>
+      
+      <% if @students.present? %>
+        <% @students.each do |id, email| %>
+          <%= link_to email,
+                answers_path(student_id: id),
+                class: "rounded-lg py-3 px-5 bg-blue-100 text-blue-500 hover:bg-blue-200 inline-block font-medium #{'bg-blue-500 text-white' if params[:student_id].eql?(id)}" %>
+        <% end %>
       <% end %>
     </div>
     <%= render "layouts/shared/pagy", pagy: @pagy if @pagy.present? %>
   </div>
 
-  <div class="bg-white shadow-md rounded-lg overflow-hidden">
+  <div class="bg-white shadow-md rounded-lg overflow-hidden my-8">
     <div class="grid grid-cols-9 gap-4 p-4 bg-gray-100 font-semibold text-sm text-gray-700">
       <div class="">Student</div>
       <div>Questionnaire</div>
