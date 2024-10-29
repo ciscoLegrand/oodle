@@ -48,8 +48,14 @@ module Oodle
 
     # DELETE /items/1
     def destroy
-      @item.destroy!
-      redirect_to items_path, notice: "Item was successfully destroyed.", status: :see_other
+      if @item.used?
+        flash[:notice] = "You cannot delete an item that is used in a question."
+      else
+        @item.destroy!
+        flash[:notice] = "Item was successfully destroyed."
+      end
+
+      redirect_to items_path
     end
 
     private
