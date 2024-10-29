@@ -10,17 +10,47 @@ actions.concat(manager_actions) if Current.user.manager?
 actions.concat([back_button]) if action_name == "show"
 %>
 
-<div id="<%= dom_id(item) %>" class="grid grid-cols-10 gap-4 p-4 items-center text-sm ho
-ver:bg-gray-50">
-  <div class="col-span-2"><%= item.name %></div>
-  <div class="col-span-2"><%= item.description %></div>
-  <div class="text-right"><%= item.group %></div>
-  <div class="text-right"><%= item.display_value %></div>
-  <div class="text-right"><%= item.correct_value %></div>
-  <div class="text-right"><%= number_with_precision(item.score, precision: 2) %></div>
-  <div class="col-span-2 flex justify-end space-x-2">
-    <% actions.each do |action| %>
-      <%= action %>
-    <% end %>
-  </div>
-</div>
+<%= render Oodle::CardComponent.new(
+    title: item.name,
+    id: dom_id(item),
+    actions: actions
+  ) do %>
+
+  <section id="<%= dom_id(item) %>" class=" rounded-lg relative px-8 py-6">
+    <p class="my-5 flex flex-col gap-4">
+      <strong>Description:</strong>
+      <%= item.description %>
+    </p>
+
+    <p class="my-5 flex flex-col gap-4">
+      <strong class="label">Group: </strong>
+      <%= item.group %>
+    </p>
+
+    <p class="my-5 flex gap-4">
+      <strong class="label">Display Value:</strong>
+      <%= item.display_value %>
+    </p>
+
+    <p class="my-5 flex gap-4">
+      <strong class="label">Correct_value:</strong>
+      <%= item.correct_value %>
+    </p>
+
+    <p class="my-5 flex gap-4">
+      <strong class="label">Score:</strong>
+      <%= item.score %>
+    </p>
+    <p class="my-5 flex flex-col gap-4">
+      <strong class="label">Used in Questions:</strong>
+      <ul class="list-disc list-inside flex flex-col gap-4">
+        <% item.questions.each do |question| %>
+          <li class="border px-3 py-1 rounded-md">
+            > Questionaire: <%= question.questionnaires.map(&:name).join(", ") %> <br>
+            > Question: <%= question.description %>
+          </li>
+        <% end %>
+      </ul>
+    </p>
+  </section>
+<% end %>

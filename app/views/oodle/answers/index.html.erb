@@ -20,19 +20,28 @@
     <%= render "layouts/shared/pagy", pagy: @pagy if @pagy.present? %>
   </div>
 
-  <div class="bg-white shadow-md rounded-lg overflow-hidden my-8">
-    <div class="grid grid-cols-9 gap-4 p-4 bg-gray-100 font-semibold text-sm text-gray-700">
-      <div class="">Student</div>
-      <div>Questionnaire</div>
-      <div class="col-span-2">Question</div>
-      <div class="text-right">Response</div>
-      <div class="text-right">Correct Values</div>
-      <div class="text-right">Score</div>
-      <div class="text-right">Answered At</div>
-      <div class="text-right">Actions</div>
+  <% if @answers.present? %>
+    <%= render Oodle::GridListComponent.new(
+      resource: @answers,
+      columns: {
+        "Student" => { method: ->(a) { a.user.email_address }, span: 1, align: "left", header_align: "left" },
+        "Questionnaire" => { method: ->(a) { a.questionnaire.name }, span: 1, align: "left" },
+        "Question" => { method: ->(a) { a.question.description }, span: 2, align: "left" },
+        "Response" => { method: ->(a) { a.result["selected"].is_a?(Array) ? a.result["selected"].join(", ") : a.result["selected"] }, span: 1, align: "right" },
+        "Correct Values" => { method: ->(a) { a.question.items.map(&:correct_value).uniq.join(", ") }, span: 1, align: "right" },
+        "Score" => { method: ->(a) { number_with_precision(a.score, precision: 2) }, span: 1, align: "right" },
+        "Question Score" => { method: ->(a) { number_with_precision(a.question.score, precision: 2) }, span: 1, align: "right" },
+        "Answered At" => { method: ->(a) { a.answered_at.strftime("%d-%m-%y %H:%M") }, span: 1, align: "right" }
+      },
+      actions: [
+        ->(answer) { link_to("Show", answer_path(answer), class: "btn btn-show") },
+        ->(answer) { link_to("Edit", edit_answer_path(answer), class: "btn btn-edit") if Current.user.manager? }
+      ]
+    ) %>
+  <% else %>
+    <div class="flex justify-center items-center my-8">
+      <h1 class="text-3xl font-semibold text-gray-800">No answers found for employee <%= User.find(params[:student_id]).email_address %></h1>
     </div>
-    <div class="divide-y divide-gray-200">
-      <%= render partial: 'answer', collection: @answers, as: :answer %>
-    </div>
-  </div>
+  <% end %>
+  
 </section>

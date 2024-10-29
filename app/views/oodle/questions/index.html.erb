@@ -10,7 +10,7 @@
   <div class="flex justify-between items-center gap-4">
     <div class="flex items-center gap-4">
       <% ["all", "simple", "multiple", "free_text"].each do |status| %>
-        <%= link_to status.capitalize,
+        <%= link_to status.humanize,
                 questions_path(sorted: status),
                 class: "rounded-lg py-3 px-5 bg-blue-100 text-blue-500 hover:bg-blue-200 inline-block font-medium #{'bg-blue-500 text-white' if params[:sorted].eql?(status)}" %>
       <% end %>
@@ -18,17 +18,24 @@
     <%= render "layouts/shared/pagy", pagy: @pagy if @pagy.present? %>
   </div>
 
-  <div id="questions" class="bg-white shadow-md rounded-lg overflow-hidden my-8">
-    <div class="grid grid-cols-9 gap-4 p-4 bg-gray-100 font-semibold text-sm text-gray-700">
-      <div class="col-span-2">Name</div>
-      <div class="col-span-2">Description</div>
-      <div class="text-right">Type</div>
-      <div class="text-right">Score</div>
-      <div class="text-right">Items</div>
-      <div class="col-span-2 text-right">Actions</div>
+  <% if @questions.present? %>
+    <%= render Oodle::GridListComponent.new(
+      resource: @questions,
+      columns: {
+        "Name" => { method: ->(q) { q.name }, span: 1, align: "left", header_align: "left" },
+        "Description" => { method: ->(q) { q.description }, span: 2, align: "left" },
+        "Type" => { method: ->(q) { q.question_type }, span: 1, align: "right" },
+        "Score" => { method: ->(q) { number_with_precision q.score, precision: 2 }, span: 2, align: "right" },
+        "Items" => { method: ->(q) { q.items.count }, span: 2, align: "right" },
+      },
+      actions: [
+        ->(question) { link_to("Show", question, class: "btn btn-show") },
+        ->(question) { button_to("Destroy", question, method: :delete, data: { turbo_confirm: "Are you sure?", turbo_frame: "_top" }, class: "btn btn-delete btn-delete-hover btn-delete-focus transition-base", aria: { label: "Delete item" }) }
+      ]
+    ) %>
+  <% else %>
+    <div class="flex justify-center items-center my-8">
+      <h1 class="text-3xl font-semibold text-gray-800">No questions found for type <%= params[:sorted].humanize %></h1>
     </div>
-    <div class="divide-y divide-gray-200">
-      <%= render partial: 'question', collection: @questions, as: :question %>
-    </div>
-  </div>
+  <% end %>
 </section>
