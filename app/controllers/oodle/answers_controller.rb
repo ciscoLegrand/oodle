@@ -6,12 +6,19 @@ module Oodle
     def index
       if Current.user.manager?
         @students = Current.user.students.pluck(:id, :email_address)
-        data = params[:student_id].present? ? [ params[:student_id] ] : Current.user.students.pluck(:id)
-        @answers = Answer.where(user_id: data)
+        data = params[:student_id].present? ? [ params[:student_id] ] : @students.map(&:first)
+        @answers = Answer.includes(:user, :questionnaire, question: :items)
+                         .where(user_id: data)
+                         .references(:user, :questionnaire, :question, :items)
+
       elsif Current.user.student? || Current.user.user?
-        @answers = Current.user.answers
+        @answers = Current.user
+                          .answers
+                          .includes(:user, :questionnaire, question: :items)
+                          .references(:user, :questionnaire, :question, :items)
       else
-        @answers = Answer.all
+        @answers = Answer.includes(:user, :questionnaire, question: :items)
+                         .references(:user, :questionnaire, :question, :items)
       end
 
       @pagy, @answers = pagy(@answers)
