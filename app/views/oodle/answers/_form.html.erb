@@ -28,10 +28,18 @@
       <% end %>
     <% end %>
   </div>
+
   <%= form.hidden_field :question_id, value: question.id %>
   <%= form.hidden_field :questionnaire_id, value: questionnaire.id %>
+
+  <% if action_name == "edit" && question.free_text?%>
+    <%= form.label :score, "Update Score", class: "label" %>
+    <%= form.number_field :score, class: "input" %>
+  <% end %>
+
   <div class="inline">
-    <%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
-    <%= form.submit 'Next', commit: :next, class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
+    <%= form.submit class: "btn btn-create btn-create-hover btn-create-focus transition-base" %>
+    <%= form.submit 'Next', commit: :next, class: "w-auto btn btn-back btn-back-hover btn-back-focus transition-base" unless action_name == "edit" %>
+    <%= link_to "Back", answers_path, class: "w-auto btn btn-back btn-back-hover btn-back-focus transition-base" %>
   </div>
 <% end %>

@@ -10,21 +10,23 @@
   
   <ul class="divide-y divide-gray-200">
     <% @resource.each do |item| %>
-      <li class="grid grid-cols-<%= @columns.sum { |_, opts| opts[:span] || 1 } + (@actions.present? ? 2 : 0) %> gap-4 p-4 items-center text-sm hover:bg-gray-50">
-        <% @columns.each do |_, options| %>
-          <div class="<%= "col-span-#{options[:span] || 1} text-#{options[:align] || 'left'}" %>">
-            <%= display_value(item, options) %>
-          </div>
-        <% end %>
-        
-        <% if @actions.present? %>
-          <div class="col-span-2 flex justify-end space-x-2">
-            <% @actions.each do |action_lambda| %>
-              <%= action_lambda.call(item) %>
-            <% end %>
-          </div>
-        <% end %>
-      </li>
+      <%= turbo_frame_tag dom_id(item) do %>
+        <li class="grid grid-cols-<%= @columns.sum { |_, opts| opts[:span] || 1 } + (@actions.present? ? 2 : 0) %> gap-4 p-4 items-center text-sm hover:bg-gray-50">
+          <% @columns.each do |_, options| %>
+            <div class="<%= "col-span-#{options[:span] || 1} text-#{options[:align] || 'left'}" %>">
+              <%= display_value(item, options) %>
+            </div>
+          <% end %>
+          
+          <% if @actions.present? %>
+            <div class="col-span-2 flex justify-end space-x-2">
+              <% @actions.each do |action_lambda| %>
+                <%= action_lambda.call(item) %>
+              <% end %>
+            </div>
+          <% end %>
+        </li>
+      <% end %>
     <% end %>
   </ul>
 </div>

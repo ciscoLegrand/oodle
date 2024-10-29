@@ -2,6 +2,8 @@
 
 module Oodle
   class GridListComponent < ViewComponent::Base
+    include Turbo::FramesHelper
+
     def initialize(resource:, columns:, actions: [])
       @resource = resource
       @columns = columns

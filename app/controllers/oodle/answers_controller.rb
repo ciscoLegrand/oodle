@@ -72,6 +72,8 @@ module Oodle
 
     # GET /answers/1/edit
     def edit
+      @questionnaire = Questionnaire.find(params[:questionnaire_id])
+      @question = Question.find(params[:question_id])
     end
 
     # PATCH/PUT /answers/1

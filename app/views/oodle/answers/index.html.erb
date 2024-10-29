@@ -35,7 +35,7 @@
       },
       actions: [
         ->(answer) { link_to("Show", answer_path(answer), class: "btn btn-show") },
-        ->(answer) { link_to("Edit", edit_answer_path(answer), class: "btn btn-edit") if Current.user.manager? }
+        ->(answer) { link_to("Edit", edit_answer_path(answer, params: {question_id: answer.question.id, questionnaire_id: answer.questionnaire.id}), data: { turbo_frame: "answer_#{answer.id}" }, class: "btn btn-edit") if Current.user.manager? }
       ]
     ) %>
   <% else %>

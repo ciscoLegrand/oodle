@@ -1,12 +1,4 @@
-<% content_for :title, "Editing answer" %>
+<%= turbo_frame_tag "answer_#{@answer.id}" do %>
+  <%= render "form", answer: @answer, question: @question, questionnaire: @questionnaire %>
+<% end %>
 
-<h1>Editing answer</h1>
-
-<%= render "form", answer: @answer %>
-
-<br>
-
-<div>
-  <%= link_to "Show this answer", @answer %> |
-  <%= link_to "Back to answers", answers_path %>
-</div>
