@@ -13,16 +13,29 @@ Current.user.manager? ? actions.concat(manager_actions) : actions.concat(student
 actions.concat([back_button]) if action_name == "show"
 %>
 
-<div id="<%= dom_id(question) %>" class="grid grid-cols-9 gap-4 p-4 items-center text-sm ho
-ver:bg-gray-50">
-  <div class="col-span-2"><%= question.name %></div>
-  <div class="col-span-2"><%= question.description %></div>
-  <div class="text-right"><%= question.question_type %></div>
-  <div class="text-right"><%= number_with_precision(question.score || 0, precision: 2) %></div>
-  <div class="text-right"><%= question.items.count %></div>
-  <div class="col-span-2 flex justify-end space-x-2">
-    <% actions.each do |action| %>
-      <%= action %>
+<%= render Oodle::CardComponent.new(
+    title: question.name,
+    id: dom_id(question),
+    actions: actions
+  ) do %>
+
+  <section id="<%= dom_id(question) %>" class=" rounded-lg relative px-8 py-6 <%= Current.user.answers.find_by(questionnaire_id: params[:id],question_id: question.id).present? ? "bg-blue-100" : "" %>">
+    <p class="my-5 flex flex-col gap-4">
+      <strong class="label">Description:</strong>
+      <%= question.description %>
+    </p>
+
+    <p class="my-5 flex gap-4">
+      <strong class="label">Type:</strong>
+      <%= question.question_type %>
+    </p>
+
+    
+    <% if question.scorable? %>
+      <p class="my-5 flex gap-4">
+        <strong class="label">Score:</strong>
+        <%= question.score %>
+      </p>
     <% end %>
-  </div>
-</div>
+  </section>
+<% end %>
